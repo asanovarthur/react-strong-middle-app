@@ -1,19 +1,26 @@
-import { useCallback } from "react";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import userAtom from "recoil/user";
+import { Dashboard } from "../Dashboard";
 import { Login } from "../Login";
+import { getUserByToken } from "./tools";
 import styles from "./Root.module.scss";
 
 export const Root = () => {
   const [user, setUser] = useRecoilState(userAtom);
 
-  const handleLogin = useCallback(() => {
-    setUser({ ...user, isLogged: true });
+  useEffect(() => {
+    const tokenUser = getUserByToken();
+
+    if (Object.keys(user).length < 1 && !!tokenUser) {
+      console.log("setting");
+      setUser(tokenUser);
+    }
   }, [user, setUser]);
 
   switch (user.isLogged) {
     case true:
-      return <>TRUE</>;
+      return <Dashboard />;
     case false:
     default:
       return (

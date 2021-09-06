@@ -7,10 +7,15 @@ const signInWithGoogle = async () => {
   try {
     const res = await auth.signInWithPopup(googleProvider);
     const user = res.user;
+    await user
+      .getIdTokenResult()
+      .then((result) => window.localStorage.setItem("userToken", result.token));
+
     const query = await db
       .collection("users")
       .where("uid", "==", user.uid)
       .get();
+
     if (query.docs.length === 0) {
       await db.collection("users").add({
         uid: user.uid,
@@ -19,9 +24,10 @@ const signInWithGoogle = async () => {
         email: user.email,
       });
     }
+
+    return user;
   } catch (err) {
     console.error(err);
-    alert(err.message);
   }
 };
 
