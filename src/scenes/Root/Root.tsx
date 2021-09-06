@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useRecoilState } from "recoil";
 import userAtom from "recoil/user";
+import { Login } from "../Login";
 import styles from "./Root.module.scss";
 
 export const Root = () => {
@@ -17,7 +18,7 @@ export const Root = () => {
     default:
       return (
         <div className={styles.loginWrapper}>
-          <button onClick={handleLogin}>LOGIN</button>
+          <Login />
         </div>
       );
   }
