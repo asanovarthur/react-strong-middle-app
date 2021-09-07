@@ -1,32 +1,49 @@
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { FC } from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import userAtom from "recoil/user";
+import { Auth } from "components";
 import { Dashboard } from "../Dashboard";
 import { Login } from "../Login";
-import { getUserByToken } from "./tools";
-import styles from "./Root.module.scss";
+
+const Logged: FC = () => {
+  return (
+    // TODO: add layout
+    <Switch>
+      <Route exact path="/dashboard" component={Dashboard} />
+      <Redirect to="/dashboard" />
+    </Switch>
+  );
+};
+
+const NotLogged: FC = () => {
+  return (
+    // TODO: add layout
+    <Switch>
+      <Route exact path="/login" component={Login} />
+      <Redirect to="/login" />
+    </Switch>
+  );
+};
 
 export const Root = () => {
-  const [user, setUser] = useRecoilState(userAtom);
-
-  useEffect(() => {
-    const tokenUser = getUserByToken();
-
-    if (Object.keys(user).length < 1 && !!tokenUser) {
-      console.log("setting");
-      setUser(tokenUser);
-    }
-  }, [user, setUser]);
+  const user = useRecoilValue(userAtom);
+  let Component;
 
   switch (user.isLogged) {
     case true:
-      return <Dashboard />;
+      Component = Logged;
+      break;
     case false:
     default:
-      return (
-        <div className={styles.loginWrapper}>
-          <Login />
-        </div>
-      );
+      Component = NotLogged;
+      break;
   }
+
+  return (
+    <Switch>
+      <Route exact path="/auth" component={Auth} key="auth" />
+      <Route component={Component} />
+    </Switch>
+  );
 };
