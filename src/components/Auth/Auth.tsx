@@ -3,9 +3,8 @@ import { useRecoilState } from "recoil";
 import userAtom from "recoil/user";
 import { getUserByToken } from "./tools";
 
-export const Auth: FC = () => {
+export const Auth: FC = ({ children }) => {
   const [user, setUser] = useRecoilState(userAtom);
-
   useEffect(() => {
     const tokenUser = getUserByToken();
 
@@ -14,5 +13,5 @@ export const Auth: FC = () => {
     }
   }, [user, setUser]);
 
-  return <div>Authenticating...</div>;
+  return <>{children}</>;
 };
