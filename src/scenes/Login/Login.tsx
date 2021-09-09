@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useRecoilState } from "recoil";
 import userAtom from "recoil/user";
-import { signInWithGoogle } from "../../firebase/auth";
+import { signInWithGoogle } from "../../provider/auth";
 import styles from "./Login.module.scss";
 
 export const Login = () => {
