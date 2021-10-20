@@ -1,0 +1,22 @@
+.container {
+  display: grid;
+  grid-template-areas: "t b" "t n";
+  grid-template-rows: 100px 1fr;
+  grid-template-columns: 300px 1fr;
+  height: 100vh;
+
+  .tree {
+    border: 1px solid red;
+    grid-area: t;
+  }
+
+  .buttons {
+    border: 1px solid blue;
+    grid-area: b;
+  }
+
+  .note {
+    border: 1px solid green;
+    grid-area: n;
+  }
+}
