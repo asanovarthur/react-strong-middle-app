@@ -6,8 +6,15 @@
   height: 100vh;
 
   .tree {
-    border: 1px solid red;
+    background-color: #d3d3d3;
+    padding: 200px 20px;
     grid-area: t;
+
+    .treeElement {
+      &:not(:last-of-type) {
+        margin-bottom: 10px;
+      }
+    }
   }
 
   .buttons {
