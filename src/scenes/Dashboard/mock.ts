@@ -40,7 +40,22 @@ export const mockNote4 = {
   creationDate: 4,
 };
 
-export const mockNotes = [mockNote0, mockNote1, mockNote2, mockNote3, mockNote4];
+export const mockNote5 = {
+  id: 5,
+  name: "First school year",
+  uri: "first-school-year",
+  parentId: 4,
+  creationDate: 5,
+};
+
+export const mockNotes = [
+  mockNote0,
+  mockNote1,
+  mockNote2,
+  mockNote3,
+  mockNote4,
+  mockNote5,
+];
 
 // some content block
 
