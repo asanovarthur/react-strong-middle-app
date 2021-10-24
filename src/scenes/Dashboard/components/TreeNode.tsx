@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from "react";
+import { useState, FC } from "react";
 import styles from "../Dashboard.module.scss";
 import { mockNotes } from "../mock";
 
@@ -13,7 +13,6 @@ export const TreeNode: FC<TreeNodeProps> = ({
   childNodes,
   className,
 }) => {
-  console.log(className);
   const hasChildren = childNodes.length > 0;
 
   const [showChildren, setShowChildren] = useState(false);

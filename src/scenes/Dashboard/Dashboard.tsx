@@ -1,4 +1,5 @@
 import { ActionButtons, NoteContent, NotesTree } from "./components";
+import { mockNotes } from "./mock";
 import styles from "./Dashboard.module.scss";
 
 export const Dashboard = () => {
@@ -6,7 +7,7 @@ export const Dashboard = () => {
     <div className={styles.container}>
       <NotesTree />
       <ActionButtons />
-      <NoteContent />
+      <NoteContent note={mockNotes[0]} />
     </div>
   );
 };

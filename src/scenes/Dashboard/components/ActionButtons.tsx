@@ -6,7 +6,9 @@ export const ActionButtons = () => {
 
   return (
     <div className={styles.buttons}>
-      <button onClick={() => setIsInEditMode(!isInEditMode)}>Edit note</button>
+      <button onClick={() => setIsInEditMode(!isInEditMode)}>
+        {isInEditMode ? "Exit edit mode" : "Enter edit mode"}
+      </button>
       <button>Delete note</button>
       {isInEditMode && (
         <>

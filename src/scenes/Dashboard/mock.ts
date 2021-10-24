@@ -67,9 +67,28 @@ export enum ContentType {
   LINK = "LINK",
 }
 
-export const contentBlock = {
+export const contentBlock0 = {
   id: 0,
   noteId: 0,
   type: ContentType.TEXT,
   value: "Some text about Michael Jackson",
+  order: 0,
 };
+
+export const contentBlock1 = {
+  id: 1,
+  noteId: 0,
+  type: ContentType.TEXT,
+  value: "Some additional text about Michael Jackson",
+  order: 1,
+};
+
+export const contentBlock2 = {
+  id: 2,
+  noteId: 1,
+  type: ContentType.TEXT,
+  value: "Some text about Kobe Bryant",
+  order: 2,
+};
+
+export const contentBlocks = [contentBlock0, contentBlock1, contentBlock2];

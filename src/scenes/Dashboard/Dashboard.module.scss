@@ -31,9 +31,18 @@
     }
   }
 
-  .note {
+  .noteWrap {
     border-top: 1px solid black;
-    padding: 20px 20px;
+    padding: 20px 40px;
     grid-area: n;
+
+    .header {
+      font-size: 40px;
+      margin-bottom: 40px;
+    }
+
+    .contentBlock {
+      margin-bottom: 20px;
+    }
   }
 }
