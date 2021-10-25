@@ -1,3 +1,3 @@
-export * from "./ActionButtons";
+export * from "./ControlPanel";
 export * from "./NoteContent";
 export * from "./NotesTree";

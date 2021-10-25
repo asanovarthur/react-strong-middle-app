@@ -1,6 +1,8 @@
 import { useState, FC } from "react";
-import styles from "../Dashboard.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretSquareRight } from "@fortawesome/free-solid-svg-icons";
 import { mockNotes } from "../mock";
+import styles from "../Dashboard.module.scss";
 
 type TreeNodeProps = {
   name: string;
@@ -19,9 +21,10 @@ export const TreeNode: FC<TreeNodeProps> = ({
 
   return (
     <div className={`${styles.treeElement} ${className ? className : ""}`}>
-      {hasChildren && (
-        <button onClick={() => setShowChildren(!showChildren)}>expand</button>
-      )}
+      <FontAwesomeIcon
+        onClick={() => setShowChildren(!showChildren)}
+        icon={faCaretSquareRight}
+      />
       {name}
       {showChildren &&
         childNodes.map((node) => (

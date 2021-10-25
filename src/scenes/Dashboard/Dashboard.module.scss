@@ -1,3 +1,5 @@
+@import "colors";
+
 .container {
   display: grid;
   grid-template-areas: "t b" "t n";
@@ -6,12 +8,18 @@
   height: 100vh;
 
   .tree {
-    background-color: #d3d3d3;
-    padding: 200px 20px;
+    background-color: $tree-blue;
+    padding: 185px 20px;
     grid-area: t;
 
     .treeElement {
       margin-bottom: 10px;
+
+      svg {
+        margin-right: 5px;
+        cursor: pointer;
+        color: $tree-expand-pink;
+      }
     }
 
     .child {
@@ -19,29 +27,39 @@
     }
   }
 
-  .buttons {
-    display: flex;
-    justify-self: center;
-    align-items: center;
-    padding: 20px 20px;
+  .controlPanelWrapper {
     grid-area: b;
+    padding: 20px 40px;
 
-    button {
-      margin-right: 10px;
+    .buttons {
+      display: flex;
+      justify-self: start;
+      align-items: center;
+      margin-top: 20px;
+
+      button {
+        margin-right: 10px;
+
+        &:not(:disabled) {
+          background-color: #4c5867;
+        }
+      }
     }
   }
 
   .noteWrap {
-    border-top: 1px solid black;
-    padding: 20px 40px;
+    padding: 60px 40px;
     grid-area: n;
 
     .header {
       font-size: 40px;
+      margin: 0;
       margin-bottom: 40px;
+      color: $main-black;
     }
 
     .contentBlock {
+      font-family: "Georgia", serif;
       margin-bottom: 20px;
     }
   }
