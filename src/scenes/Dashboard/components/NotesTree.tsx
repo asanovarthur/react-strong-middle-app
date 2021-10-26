@@ -16,6 +16,7 @@ export const NotesTree = () => {
           childNodes={mockNotes.filter(
             (childNote) => childNote.parentId === note.id
           )}
+          showIcon
         />
       ));
 
