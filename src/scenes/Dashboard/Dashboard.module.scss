@@ -2,16 +2,26 @@
 
 .container {
   display: grid;
-  grid-template-areas: "t b" "t n";
+  grid-template-areas: "s b" "s n";
   grid-template-rows: 100px 1fr;
   grid-template-columns: 300px 1fr;
   height: 100vh;
 
-  .tree {
+  .sidebar {
+    grid-area: s;
     background-color: $tree-blue;
-    // padding: 170px 0;
-    grid-area: t;
+  }
 
+  .user {
+    padding: 30px 20px;
+    height: 120px;
+
+    .name {
+      margin-right: 5px;
+    }
+  }
+
+  .tree {
     .treeElement {
       .wrapper {
         padding: 5px 0 5px 20px;
@@ -29,13 +39,9 @@
       }
     }
 
-    .child {
-      padding-left: 15px;
-
-      &.empty {
-        font-style: italic;
-        color: #757b83;
-      }
+    .empty {
+      font-style: italic;
+      color: #757b83;
     }
   }
 

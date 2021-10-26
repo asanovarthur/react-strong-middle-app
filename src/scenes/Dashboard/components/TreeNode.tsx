@@ -12,6 +12,7 @@ type TreeNodeProps = {
   childNodes: any[];
   className?: string;
   showIcon?: boolean;
+  nestingLevel?: number;
 };
 
 export const TreeNode: FC<TreeNodeProps> = ({
@@ -19,6 +20,7 @@ export const TreeNode: FC<TreeNodeProps> = ({
   childNodes,
   className,
   showIcon,
+  nestingLevel = 1,
 }) => {
   const hasChildren = childNodes.length > 0;
 
@@ -26,7 +28,10 @@ export const TreeNode: FC<TreeNodeProps> = ({
 
   return (
     <div className={`${styles.treeElement} ${className ? className : ""}`}>
-      <div className={`${styles.wrapper} ${showIcon ? "" : styles.empty}`}>
+      <div
+        className={`${styles.wrapper} ${showIcon ? "" : styles.empty}`}
+        style={{ paddingLeft: `${nestingLevel * 20}px` }}
+      >
         {showIcon && (
           <FontAwesomeIcon
             onClick={() => setShowChildren(!showChildren)}
@@ -43,15 +48,17 @@ export const TreeNode: FC<TreeNodeProps> = ({
               childNodes={mockNotes.filter(
                 (childNote) => childNote.parentId === node.id
               )}
-              className={styles.child}
               showIcon
+              nestingLevel={nestingLevel + 1}
+              className={styles.child}
             />
           ))
         ) : (
           <TreeNode
             name="No pages inside"
             childNodes={[]}
-            className={`${styles.child} ${styles.empty}`}
+            nestingLevel={nestingLevel + 1}
+            className={styles.empty}
           />
         ))}
     </div>
