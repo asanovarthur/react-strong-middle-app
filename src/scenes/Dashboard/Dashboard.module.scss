@@ -9,11 +9,18 @@
 
   .tree {
     background-color: $tree-blue;
-    padding: 185px 20px;
+    // padding: 170px 0;
     grid-area: t;
 
     .treeElement {
-      margin-bottom: 10px;
+      .wrapper {
+        padding: 5px 0 5px 20px;
+        cursor: pointer;
+
+        &:hover:not(.empty) {
+          background-color: $tree-active-blue;
+        }
+      }
 
       svg {
         margin-right: 5px;
@@ -23,7 +30,12 @@
     }
 
     .child {
-      padding-left: 10px;
+      padding-left: 15px;
+
+      &.empty {
+        font-style: italic;
+        color: #757b83;
+      }
     }
   }
 
@@ -41,7 +53,7 @@
         margin-right: 10px;
 
         &:not(:disabled) {
-          background-color: #4c5867;
+          background-color: $button-grey;
         }
       }
     }
