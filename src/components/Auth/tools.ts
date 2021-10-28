@@ -6,11 +6,11 @@ export const getUserByToken = (): User | null => {
 
   if (!token) return null;
 
-  const { user_id: id, name, exp } = jwtDecode<any>(token);
+  const { user_id: id, name, picture: photoURL, exp } = jwtDecode<any>(token);
 
   if (!!exp && tokenExpired(exp)) return null;
 
-  return { id, name, isLogged: true };
+  return { id, name, photoURL, isLogged: true };
 };
 
 const tokenExpired = (exp: number) => {

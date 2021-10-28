@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { withRouter, useHistory } from "react-router-dom";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +13,7 @@ import styles from "../Dashboard.module.scss";
 
 export const ControlPanel = () => {
   const [isInEditMode, setIsInEditMode] = useState(false);
+  const history = useHistory();
 
   return (
     <div className={styles.controlPanelWrapper}>
@@ -30,7 +32,10 @@ export const ControlPanel = () => {
           <FontAwesomeIcon icon={faArrowAltCircleLeft} />
           Cancel
         </Button>
-        <Button disabled={!isInEditMode}>
+        <Button
+          disabled={!isInEditMode}
+          onClick={() => history.push("/qweqweqw")}
+        >
           <FontAwesomeIcon icon={faSave} />
           Save
         </Button>

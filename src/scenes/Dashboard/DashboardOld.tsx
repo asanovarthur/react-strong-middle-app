@@ -30,7 +30,10 @@ export const DashboardOld = () => {
     db.collection("data")
       .doc(`${user.id}`)
       .get()
-      .then((document) => (data = (document.data() as any).data))
+      .then((document) => {
+        console.log(document);
+        data = (document.data() as any).data;
+      })
       .finally(() => {
         setIsLoading(false);
         setRecoilData(!!data ? data : "нет данных");

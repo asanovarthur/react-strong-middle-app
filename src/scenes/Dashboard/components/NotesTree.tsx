@@ -23,5 +23,10 @@ export const NotesTree = () => {
     setTreeElements(parentElements);
   }, []);
 
-  return <div className={styles.tree}>{treeElements}</div>;
+  return (
+    <div className={styles.tree}>
+      <div className={styles.header}>NOTES</div>
+      {treeElements}
+    </div>
+  );
 };

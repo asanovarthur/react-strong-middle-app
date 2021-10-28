@@ -11,19 +11,19 @@ const signInWithGoogle = async () => {
       .getIdTokenResult()
       .then((result) => window.localStorage.setItem("userToken", result.token));
 
-    const query = await db
+    await db
       .collection("users")
-      .where("uid", "==", user.uid)
-      .get();
-
-    if (query.docs.length === 0) {
-      await db.collection("users").add({
-        uid: user.uid,
-        name: user.displayName,
-        authProvider: "google",
-        email: user.email,
+      .doc(`${user.id}`)
+      .get()
+      .catch(() => {
+        db.collection("users").doc(`${user.id}`).set({
+          uid: user.uid,
+          name: user.displayName,
+          authProvider: "google",
+          email: user.email,
+          photoURL: user.photoURL,
+        });
       });
-    }
 
     return user;
   } catch (err) {
@@ -32,7 +32,6 @@ const signInWithGoogle = async () => {
 };
 
 const logout = () => {
-  console.log("sign out");
   auth.signOut();
 };
 

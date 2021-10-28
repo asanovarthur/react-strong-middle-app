@@ -1,8 +1,8 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import userAtom from "recoil/user";
-import { Dashboard } from "../Dashboard";
+import { Dashboard, DashboardOld } from "../Dashboard";
 import { Login } from "../Login";
 
 const Logged: FC = () => {
@@ -26,10 +26,11 @@ const NotLogged: FC = () => {
 };
 
 export const Root = () => {
-  const user = useRecoilValue(userAtom);
+  const { isLogged } = useRecoilValue(userAtom);
+
   let Component;
 
-  switch (user.isLogged) {
+  switch (isLogged) {
     case true:
       Component = Logged;
       break;

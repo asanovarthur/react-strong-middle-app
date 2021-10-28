@@ -9,26 +9,54 @@
 
   .sidebar {
     grid-area: s;
-    background-color: $tree-blue;
+    background-color: $tree-grey;
   }
 
   .user {
-    padding: 30px 20px;
-    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    margin-bottom: 90px;
+
+    span {
+      display: flex;
+      align-items: center;
+    }
+
+    &:hover {
+      background-color: $tree-active-grey;
+    }
+
+    svg {
+      cursor: pointer;
+    }
 
     .name {
       margin-right: 5px;
     }
+
+    .photo {
+      width: 30px;
+      margin-right: 10px;
+      border-radius: 100px;
+    }
   }
 
   .tree {
+    .header {
+      padding-left: 20px;
+      margin-bottom: 10px;
+      color: $tree-empty-grey;
+    }
+
     .treeElement {
       .wrapper {
         padding: 5px 0 5px 20px;
         cursor: pointer;
 
         &:hover:not(.empty) {
-          background-color: $tree-active-blue;
+          background-color: $tree-active-grey;
         }
       }
 
@@ -41,7 +69,7 @@
 
     .empty {
       font-style: italic;
-      color: #757b83;
+      color: $tree-empty-grey;
     }
   }
 

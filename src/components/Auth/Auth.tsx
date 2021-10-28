@@ -5,6 +5,7 @@ import { getUserByToken } from "./tools";
 
 export const Auth: FC = ({ children }) => {
   const [user, setUser] = useRecoilState(userAtom);
+
   useEffect(() => {
     const tokenUser = getUserByToken();
 
