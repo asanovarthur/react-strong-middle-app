@@ -1,3 +1,4 @@
+import { ContentType } from "types";
 // some note
 
 export const mockNote0 = {
@@ -58,14 +59,6 @@ export const mockNotes = [
 ];
 
 // some content block
-
-export enum ContentType {
-  TEXT = "TEXT",
-  IMAGE = "IMAGE",
-  VIDEO = "VIDEO",
-  TABLE = "TABLE",
-  LINK = "LINK",
-}
 
 export const contentBlock0 = {
   id: 0,

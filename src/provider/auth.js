@@ -13,16 +13,17 @@ const signInWithGoogle = async () => {
 
     await db
       .collection("users")
-      .doc(`${user.id}`)
+      .doc(`${user.uid}`)
       .get()
-      .catch(() => {
-        db.collection("users").doc(`${user.id}`).set({
-          uid: user.uid,
-          name: user.displayName,
-          authProvider: "google",
-          email: user.email,
-          photoURL: user.photoURL,
-        });
+      .then((dbUser) => {
+        if (!dbUser.exists)
+          db.collection("users").doc(`${user.uid}`).set({
+            uid: user.uid,
+            name: user.displayName,
+            authProvider: "google",
+            email: user.email,
+            photoURL: user.photoURL,
+          });
       });
 
     return user;
