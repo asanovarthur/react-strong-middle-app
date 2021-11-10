@@ -1,6 +1,6 @@
 @import "colors";
 
-.controlPanelWrapper {
+.wrap {
   grid-area: b;
   padding: 20px 40px;
 
@@ -12,10 +12,6 @@
 
     button {
       margin-right: 10px;
-
-      &:not(:disabled) {
-        background-color: $button-grey;
-      }
     }
   }
 }

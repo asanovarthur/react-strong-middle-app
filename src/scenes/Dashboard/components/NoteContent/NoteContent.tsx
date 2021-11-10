@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { handleUpload, getImage } from "provider";
-import { contentBlocks as mockContentBlocks } from "../../../../mock";
+import { contentBlocks as mockContentBlocks } from "mock";
 import styles from "./NoteContent.module.scss";
 import { ContentType } from "types";
 

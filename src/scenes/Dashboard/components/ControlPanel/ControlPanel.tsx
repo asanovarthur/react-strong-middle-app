@@ -12,11 +12,11 @@ import { ContainedButton as Button } from "components";
 import styles from "./ControlPanel.module.scss";
 
 export const ControlPanel = () => {
-  const [isInEditMode, setIsInEditMode] = useState(false);
+  const [isInEditMode, setIsInEditMode] = useState(true);
   const history = useHistory();
 
   return (
-    <div className={styles.controlPanelWrapper}>
+    <div className={styles.wrap}>
       <FormControlLabel
         control={
           <Switch

@@ -1,32 +1,28 @@
 @import "colors";
 
-.user {
+.wrap {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  margin-bottom: 90px;
+  padding: 20px 20px;
+  border-top: 1px solid $tree-active-grey;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $tree-active-grey;
+  }
 
   span {
     display: flex;
     align-items: center;
   }
 
-  &:hover {
-    background-color: $tree-active-grey;
-  }
-
   svg {
-    cursor: pointer;
+    color: $tree-empty-grey;
+    margin-right: 10px;
   }
 
   .name {
     margin-right: 5px;
-  }
-
-  .photo {
-    width: 30px;
-    margin-right: 10px;
-    border-radius: 100px;
+    color: $tree-empty-grey;
   }
 }
