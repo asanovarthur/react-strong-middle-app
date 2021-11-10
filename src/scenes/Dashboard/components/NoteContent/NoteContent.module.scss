@@ -1,0 +1,18 @@
+@import "colors";
+
+.noteWrap {
+  padding: 60px 40px;
+  grid-area: n;
+
+  .header {
+    font-size: 40px;
+    margin: 0;
+    margin-bottom: 40px;
+    color: $main-black;
+  }
+
+  .contentBlock {
+    font-family: "Georgia", serif;
+    margin-bottom: 20px;
+  }
+}

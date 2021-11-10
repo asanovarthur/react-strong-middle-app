@@ -1,5 +1,5 @@
 import { ControlPanel, NoteContent, Sidebar } from "./components";
-import { mockNotes } from "./mock";
+import { mockNotes } from "../../mock";
 import styles from "./Dashboard.module.scss";
 
 export const Dashboard = () => {

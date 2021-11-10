@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import userAtom from "recoil/user";
 import { logout } from "provider/auth";
-import styles from "../Dashboard.module.scss";
+import styles from "./User.module.scss";
 
 export const User: FC = () => {
   const [user, setUser] = useRecoilState(userAtom);

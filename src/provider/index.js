@@ -1,5 +1,5 @@
 import firebase from "./firebase";
 import * as auth from "./auth";
-import { handleUpload } from "./handleUpload";
+import { handleUpload, getImage } from "./handleUpload";
 
-export { firebase, auth, handleUpload };
+export { firebase, auth, handleUpload, getImage };

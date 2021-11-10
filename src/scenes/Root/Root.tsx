@@ -1,8 +1,8 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import userAtom from "recoil/user";
-import { Dashboard, DashboardOld } from "../Dashboard";
+import { Dashboard } from "../Dashboard";
 import { Login } from "../Login";
 
 const Logged: FC = () => {

@@ -1,0 +1,21 @@
+@import "colors";
+
+.controlPanelWrapper {
+  grid-area: b;
+  padding: 20px 40px;
+
+  .buttons {
+    display: flex;
+    justify-self: start;
+    align-items: center;
+    margin-top: 20px;
+
+    button {
+      margin-right: 10px;
+
+      &:not(:disabled) {
+        background-color: $button-grey;
+      }
+    }
+  }
+}

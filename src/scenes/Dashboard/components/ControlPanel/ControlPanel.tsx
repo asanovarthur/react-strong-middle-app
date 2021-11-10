@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { withRouter, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,7 +9,7 @@ import {
   faArrowAltCircleLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { ContainedButton as Button } from "components";
-import styles from "../Dashboard.module.scss";
+import styles from "./ControlPanel.module.scss";
 
 export const ControlPanel = () => {
   const [isInEditMode, setIsInEditMode] = useState(false);

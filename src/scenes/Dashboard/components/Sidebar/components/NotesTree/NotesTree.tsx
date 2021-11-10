@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { mockNotes } from "../mock";
+import { mockNotes } from "mock";
 import { TreeNode } from "./TreeNode";
-import styles from "../Dashboard.module.scss";
+import styles from "./NotesTree.module.scss";
 
 export const NotesTree = () => {
   const [treeElements, setTreeElements] = useState<any>([]);

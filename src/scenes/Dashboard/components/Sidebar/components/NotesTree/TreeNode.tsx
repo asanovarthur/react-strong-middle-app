@@ -4,8 +4,8 @@ import {
   faCaretSquareRight,
   faCaretSquareDown,
 } from "@fortawesome/free-solid-svg-icons";
-import { mockNotes } from "../mock";
-import styles from "../Dashboard.module.scss";
+import { mockNotes } from "../../../../../../mock";
+import styles from "./NotesTree.module.scss";
 
 type TreeNodeProps = {
   name: string;

@@ -1,0 +1,9 @@
+@import "colors";
+
+.sidebar {
+  grid-area: s;
+  background-color: $tree-grey;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}

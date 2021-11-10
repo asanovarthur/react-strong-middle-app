@@ -1,0 +1,32 @@
+@import "colors";
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  margin-bottom: 90px;
+
+  span {
+    display: flex;
+    align-items: center;
+  }
+
+  &:hover {
+    background-color: $tree-active-grey;
+  }
+
+  svg {
+    cursor: pointer;
+  }
+
+  .name {
+    margin-right: 5px;
+  }
+
+  .photo {
+    width: 30px;
+    margin-right: 10px;
+    border-radius: 100px;
+  }
+}
