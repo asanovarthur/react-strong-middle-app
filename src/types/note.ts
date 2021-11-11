@@ -1,8 +1,8 @@
 export interface Note {
   id: number | string;
-  userId: number;
+  userId: number | string;
   name: string;
   uri: string;
-  parentId?: number;
+  parentId?: number | string;
   creationDate: number;
 }

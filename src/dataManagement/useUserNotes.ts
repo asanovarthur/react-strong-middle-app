@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { db } from "provider/auth";
 import userAtom from "recoil/user";
 import { useRecoilValue } from "recoil";
@@ -13,15 +13,12 @@ export const useUserNotes = (): UseUserNotesType => {
   const [result, setResult] = useState<any>([]);
 
   useEffect(() => {
-    // Create an scoped async function in the hook
     async function getNotes() {
       const notes = await db.collection("notes").where("userId", "==", 1).get();
 
-      notes.docs.forEach((item) => {
-        setResult([...result, item.data()]);
-      });
+      setResult(notes.docs.map((item) => item.data()));
     }
-    // Execute the created function directly
+
     getNotes();
   }, []);
 

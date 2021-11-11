@@ -1,4 +1,5 @@
 import { FC, useEffect, useMemo, useState } from "react";
+import { useContentBlocks } from "dataManagement";
 import { handleUpload, getImage } from "provider";
 import { contentBlocks as mockContentBlocks } from "mock";
 import styles from "./NoteContent.module.scss";
@@ -9,6 +10,7 @@ type NoteContentProps = {
 };
 
 export const NoteContent: FC<NoteContentProps> = ({ note }) => {
+  const { data } = useContentBlocks();
   const [file, setFile] = useState(null);
   const [imgUrl, setImgUrl] = useState();
 
@@ -21,11 +23,11 @@ export const NoteContent: FC<NoteContentProps> = ({ note }) => {
   }
 
   const contentBlocks = useMemo(() => {
-    return mockContentBlocks
-      .filter((contentBlock) => contentBlock.noteId === note.id)
+    return data
+      .filter((contentBlock) => contentBlock.noteId === 1)
       .sort((a, b) => a.order - b.order)
       .map((block) => <div className={styles.contentBlock}>{block.value}</div>);
-  }, [note.id]);
+  }, [data, note.id]);
 
   return (
     <div className={styles.noteWrap}>
