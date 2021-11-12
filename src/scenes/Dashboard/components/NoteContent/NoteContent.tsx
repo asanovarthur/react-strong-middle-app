@@ -2,6 +2,7 @@ import { FC, useMemo } from "react";
 import { useRecoilValue } from "recoil";
 import { useContentBlocks } from "dataManagement";
 import noteAtom from "recoil/note";
+import { ContentBlockAdder } from "./ContentBlockAdder";
 import styles from "./NoteContent.module.scss";
 
 export const NoteContent: FC = () => {
@@ -22,6 +23,7 @@ export const NoteContent: FC = () => {
     <div className={styles.noteWrap}>
       <h1 className={styles.header}>{name}</h1>
       {contentBlocks}
+      <ContentBlockAdder />
     </div>
   );
 };
