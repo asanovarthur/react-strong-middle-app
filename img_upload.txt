@@ -1,0 +1,17 @@
+  const [file, setFile] = useState(null);
+  const [imgUrl, setImgUrl] = useState();
+  
+  function handleChange(e: any) {
+    setFile(e.target.files[0]);
+  }
+
+  useEffect(() => {
+    getImage(setImgUrl);
+  }, []);
+
+
+  <form onSubmit={() => handleUpload(ContentType.IMAGE, file)}>
+    <input type="file" onChange={handleChange} />
+    <button disabled={!file}>upload to firebase</button>
+  </form>
+  <img src={imgUrl} alt="" />
