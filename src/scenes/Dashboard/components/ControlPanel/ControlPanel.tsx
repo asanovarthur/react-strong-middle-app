@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,9 +10,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ContainedButton as Button } from "components";
 import styles from "./ControlPanel.module.scss";
+import userAtom from "recoil/user";
 
 export const ControlPanel = () => {
-  const [isInEditMode, setIsInEditMode] = useState(true);
+  const [user, setUser] = useRecoilState(userAtom);
+  const { isInEditMode } = user;
   const history = useHistory();
 
   return (
@@ -21,7 +23,7 @@ export const ControlPanel = () => {
         control={
           <Switch
             checked={isInEditMode}
-            onChange={() => setIsInEditMode(!isInEditMode)}
+            onChange={() => setUser({ ...user, isInEditMode: !isInEditMode })}
           />
         }
         label={isInEditMode ? "Edit: ON" : "Edit: OFF"}

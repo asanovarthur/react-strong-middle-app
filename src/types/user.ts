@@ -3,4 +3,5 @@ export interface User {
   name: string;
   photoURL: string;
   isLogged: boolean;
+  isInEditMode: boolean;
 }

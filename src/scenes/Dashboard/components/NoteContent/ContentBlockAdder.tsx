@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,9 +9,17 @@ import { ContentType } from "types";
 import { ContainedButton as Button } from "components";
 import styles from "./NoteContent.module.scss";
 
-export const ContentBlockAdder: FC = () => {
-  const [contentBlockType, setContentBlockType] = useState(ContentType.TEXT);
+type ContentBlockAdderProps = {
+  contentBlockType: ContentType;
+  setContentBlockType: (type: ContentType) => void;
+  setShowModal: (flag: boolean) => void;
+};
 
+export const ContentBlockAdder: FC<ContentBlockAdderProps> = ({
+  contentBlockType,
+  setContentBlockType,
+  setShowModal,
+}) => {
   const handleChange = (event: any) => {
     setContentBlockType(event.target.value);
   };
@@ -32,7 +40,7 @@ export const ContentBlockAdder: FC = () => {
           ))}
         </Select>
       </FormControl>
-      <Button onClick={() => {}}>
+      <Button onClick={() => setShowModal(true)}>
         <FontAwesomeIcon icon={faPlus} />
         Add content block
       </Button>

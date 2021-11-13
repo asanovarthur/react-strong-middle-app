@@ -10,7 +10,7 @@ export const getUserByToken = (): User | null => {
 
   if (!!exp && tokenExpired(exp)) return null;
 
-  return { id, name, photoURL, isLogged: true };
+  return { id, name, photoURL, isLogged: true, isInEditMode: false };
 };
 
 const tokenExpired = (exp: number) => {
