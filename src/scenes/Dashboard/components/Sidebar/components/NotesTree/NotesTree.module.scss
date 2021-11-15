@@ -1,7 +1,8 @@
 @import "colors";
 
 .tree {
-  align-self: flex-start;
+  position: absolute;
+  top: 150px;
 
   .header {
     padding-left: 20px;

@@ -9,3 +9,23 @@
   box-shadow: 24;
   padding: 50px;
 }
+
+.editable {
+  font-family: sans-serif;
+  margin-left: 10%;
+  width: 75%;
+  min-height: 100px;
+  border: 1px dashed #aaa;
+  padding: 5px;
+  resize: none;
+}
+
+textarea.editable {
+  font-family: monospace, monospace;
+}
+
+button {
+  min-width: 70px;
+  padding: 5px;
+  margin: 5px;
+}

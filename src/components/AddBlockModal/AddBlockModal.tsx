@@ -3,8 +3,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { ContentType } from "types";
 import { TextEditor } from "./TextEditor";
-
 import styles from "./AddBlockModal.module.scss";
+
 type AddBlockModalProps = {
   isOpen: boolean;
   contentBlockType: ContentType;
