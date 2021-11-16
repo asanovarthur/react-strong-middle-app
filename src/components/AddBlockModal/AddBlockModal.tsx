@@ -9,21 +9,23 @@ type AddBlockModalProps = {
   isOpen: boolean;
   contentBlockType: ContentType;
   setShowModal: (flag: boolean) => void;
+  updateContentData: (contentData: any) => void;
 };
 
 export const AddBlockModal: FC<AddBlockModalProps> = ({
   isOpen,
   contentBlockType,
   setShowModal,
+  updateContentData,
 }) => {
   const handleClose = () => setShowModal(false);
 
   const inputElement = useMemo(() => {
     switch (contentBlockType) {
       case ContentType.TEXT:
-        return <TextEditor value="qwe" />;
+        return <TextEditor updateContentData={updateContentData} />;
     }
-  }, [contentBlockType]);
+  }, [contentBlockType, updateContentData]);
 
   return (
     <Modal open={isOpen} onClose={handleClose}>

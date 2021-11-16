@@ -4,7 +4,7 @@ import sanitizeHtml from "sanitize-html";
 import styles from "./AddBlockModal.module.scss";
 
 type TextEditorProps = {
-  value: string;
+  updateContentData: (contentData: any) => void;
 };
 
 const sanitizeConf = {
@@ -26,7 +26,7 @@ function EditButton(props: any) {
   );
 }
 
-export const TextEditor: FC<TextEditorProps> = ({ value }) => {
+export const TextEditor: FC<TextEditorProps> = ({ updateContentData }) => {
   const [myState, setMyState] = useState({
     html: `<p>Hello <b>World</b> !</p><p>Paragraph 2</p>`,
     editable: true,
@@ -70,6 +70,7 @@ export const TextEditor: FC<TextEditorProps> = ({ value }) => {
       <button onClick={toggleEditable}>
         Make {myState.editable ? "readonly" : "editable"}
       </button>
+      <button onClick={() => updateContentData(myState.html)}>save</button>
     </div>
   );
 };
