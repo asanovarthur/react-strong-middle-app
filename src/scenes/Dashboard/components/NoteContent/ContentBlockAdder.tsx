@@ -11,7 +11,7 @@ import styles from "./NoteContent.module.scss";
 
 type ContentBlockAdderProps = {
   contentBlockType: ContentType;
-  setContentBlockType: (type: ContentType) => void;
+  setContentBlockType: (type: any) => void;
   setShowModal: (flag: boolean) => void;
 };
 

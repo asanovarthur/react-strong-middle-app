@@ -1,62 +1,61 @@
-import { useHistory } from "react-router-dom";
+import { useCallback } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrashAlt,
   faSave,
   faArrowAltCircleLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import { ContainedButton as Button } from "components";
-import { db } from "provider/auth";
-import styles from "./ControlPanel.module.scss";
+import { ContentBlock } from "types";
 import userAtom from "recoil/user";
-import { useCallback } from "react";
-import contentBlockAtom from "recoil/editContentBlock";
+import editContentBlockAtom from "recoil/editContentBlocks";
+import { db } from "provider/auth";
+import { ButtonWithIcon } from "components";
+import styles from "./ControlPanel.module.scss";
 
 export const ControlPanel = () => {
   const [user, setUser] = useRecoilState(userAtom);
-  const editContentBlocks = useRecoilValue(contentBlockAtom);
+  const editContentBlocks = useRecoilValue(editContentBlockAtom);
   const { isInEditMode } = user;
-  const history = useHistory();
 
   const handleSave = useCallback(() => {
-    console.log(typeof editContentBlocks);
-    console.log(editContentBlocks);
-
     if (editContentBlocks.length < 1) return;
 
-    editContentBlocks.forEach((cB: any) =>
-      db.collection("contentBlocks").add(cB)
+    editContentBlocks.forEach((contentBlock: ContentBlock) =>
+      db.collection("contentBlocks").add(contentBlock)
     );
   }, [editContentBlocks]);
+
+  const switchEditMode = useCallback(
+    () => setUser({ ...user, isInEditMode: !isInEditMode }),
+    [user, setUser, isInEditMode]
+  );
 
   return (
     <div className={styles.wrap}>
       <FormControlLabel
-        control={
-          <Switch
-            checked={isInEditMode}
-            onChange={() => setUser({ ...user, isInEditMode: !isInEditMode })}
-          />
-        }
+        control={<Switch checked={isInEditMode} onChange={switchEditMode} />}
         label={isInEditMode ? "Edit: ON" : "Edit: OFF"}
         labelPlacement="end"
       />
       <div className={styles.buttons}>
-        <Button disabled={!isInEditMode}>
-          <FontAwesomeIcon icon={faArrowAltCircleLeft} />
-          Cancel
-        </Button>
-        <Button disabled={!isInEditMode} onClick={handleSave}>
-          <FontAwesomeIcon icon={faSave} />
-          Save
-        </Button>
-        <Button disabled={!isInEditMode}>
-          <FontAwesomeIcon icon={faTrashAlt} />
-          Delete
-        </Button>
+        <ButtonWithIcon
+          disabled={!isInEditMode}
+          icon={faArrowAltCircleLeft}
+          text="Cancel"
+        />
+        <ButtonWithIcon
+          disabled={!isInEditMode}
+          icon={faSave}
+          text="Save"
+          onClick={handleSave}
+        />
+        <ButtonWithIcon
+          disabled={!isInEditMode}
+          icon={faTrashAlt}
+          text="Delete"
+        />
       </div>
     </div>
   );

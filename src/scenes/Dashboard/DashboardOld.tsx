@@ -31,7 +31,6 @@ export const DashboardOld = () => {
       .doc(`${user.id}`)
       .get()
       .then((document) => {
-        console.log(document);
         data = (document.data() as any).data;
       })
       .finally(() => {

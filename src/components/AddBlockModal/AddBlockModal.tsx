@@ -1,7 +1,12 @@
-import { FC, useMemo } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
+import { useRecoilValue, useRecoilState } from "recoil";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { ContentType } from "types";
+import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { ContentBlock, ContentType } from "types";
+import editContentBlocksAtom from "recoil/editContentBlocks";
+import noteAtom from "recoil/note";
+import { ButtonWithIcon } from "components";
 import { TextEditor } from "./TextEditor";
 import styles from "./AddBlockModal.module.scss";
 
@@ -9,29 +14,56 @@ type AddBlockModalProps = {
   isOpen: boolean;
   contentBlockType: ContentType;
   setShowModal: (flag: boolean) => void;
-  updateContentData: (contentData: any) => void;
+  maxBlockOrder: number;
 };
 
 export const AddBlockModal: FC<AddBlockModalProps> = ({
   isOpen,
   contentBlockType,
   setShowModal,
-  updateContentData,
+  maxBlockOrder,
 }) => {
-  const handleClose = () => setShowModal(false);
+  const { id: noteId } = useRecoilValue(noteAtom);
+  const [editContentBlocks, setEditContentBlocks] = useRecoilState(
+    editContentBlocksAtom
+  );
+  const [value, setValue] = useState("");
+
+  const handleClose = useCallback(() => setShowModal(false), [setShowModal]);
+
+  const handleSave = useCallback(() => {
+    const preparedData: ContentBlock = {
+      noteId,
+      order: maxBlockOrder + 1,
+      type: contentBlockType,
+      value,
+    };
+
+    setEditContentBlocks([...editContentBlocks, preparedData]);
+    handleClose();
+  }, [
+    value,
+    contentBlockType,
+    maxBlockOrder,
+    noteId,
+    editContentBlocks,
+    setEditContentBlocks,
+    handleClose,
+  ]);
 
   const inputElement = useMemo(() => {
     switch (contentBlockType) {
       case ContentType.TEXT:
-        return <TextEditor updateContentData={updateContentData} />;
+        return <TextEditor value={value} setValue={setValue} />;
     }
-  }, [contentBlockType, updateContentData]);
+  }, [contentBlockType, value]);
 
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box className={styles.box}>
         <h3>Add block of type {contentBlockType}</h3>
         {inputElement}
+        <ButtonWithIcon onClick={handleSave} icon={faSave} text="Save" />
       </Box>
     </Modal>
   );
