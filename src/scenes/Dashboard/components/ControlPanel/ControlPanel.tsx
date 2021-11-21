@@ -7,7 +7,7 @@ import {
   faSave,
   faArrowAltCircleLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import { ContentBlock } from "types";
+import { ContentBlock, ContentType } from "types";
 import userAtom from "recoil/user";
 import editContentBlockAtom from "recoil/editContentBlocks";
 import { db } from "provider/auth";
@@ -21,6 +21,8 @@ export const ControlPanel = () => {
 
   const handleSave = useCallback(() => {
     if (editContentBlocks.length < 1) return;
+
+    // TODO: вынести в отдельную тулзу - prepareContentBlock
 
     editContentBlocks.forEach((contentBlock: ContentBlock) =>
       db.collection("contentBlocks").add(contentBlock)

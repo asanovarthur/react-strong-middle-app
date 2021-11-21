@@ -16,7 +16,7 @@ export const handleUpload = async (contentType: ContentType, value: any) => {
   }
 };
 
-const uploadImage = (file: File) => {
+export const uploadImage = (file: File) => {
   const ref = storage.ref(`/images/${file.name}`);
   const uploadTask = ref.put(file);
   uploadTask.on("state_changed", console.log, console.error, () =>
@@ -24,9 +24,14 @@ const uploadImage = (file: File) => {
   );
 };
 
-export const getImage = (setImgUrl: (url: any) => void) => {
-  return storage
-    .ref(`/images/avatar.jpg`)
+export const getImage = (imageName: string, setImgUrl: (url: any) => void) => {
+  storage
+    .ref(`/images/${imageName}`)
     .getDownloadURL()
-    .then((url) => setImgUrl(url));
+    .then((url) => {
+      console.log("setting");
+      setImgUrl(url);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => console.log("wtf"));
 };

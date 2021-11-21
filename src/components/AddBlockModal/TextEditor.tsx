@@ -1,11 +1,12 @@
 import { FC, useCallback, useMemo } from "react";
 import ContentEditable, { Props } from "react-contenteditable";
+import { ContentBlock } from "types";
 import { buttonsConfig } from "./constants";
 import { EditButton } from "./EditButton";
 import styles from "./AddBlockModal.module.scss";
 
 type TextEditorProps = {
-  value: string;
+  value: ContentBlock["value"];
   setValue: (value: string) => void;
 };
 
@@ -26,13 +27,13 @@ export const TextEditor: FC<TextEditorProps> = ({ value, setValue }) => {
   );
 
   return (
-    <div>
+    <>
       {editButtons}
       <ContentEditable
         onChange={handleChange}
-        html={value}
+        html={value as string}
         className={styles.editable}
       />
-    </div>
+    </>
   );
 };

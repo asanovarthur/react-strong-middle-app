@@ -7,6 +7,7 @@ type ByttonWithIconProps = {
   disabled?: boolean;
   icon: IconDefinition;
   text: string;
+  className?: string;
   onClick?: () => void;
 };
 
@@ -14,10 +15,15 @@ export const ButtonWithIcon: FC<ByttonWithIconProps> = ({
   disabled,
   icon,
   text,
+  className,
   onClick,
 }) => {
   return (
-    <Button disabled={disabled ?? false} onClick={onClick}>
+    <Button
+      disabled={disabled ?? false}
+      onClick={onClick}
+      className={className ?? ""}
+    >
       <FontAwesomeIcon icon={icon} />
       {text}
     </Button>

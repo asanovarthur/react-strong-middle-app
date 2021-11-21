@@ -8,6 +8,7 @@ import editContentBlocksAtom from "recoil/editContentBlocks";
 import noteAtom from "recoil/note";
 import { ButtonWithIcon } from "components";
 import { TextEditor } from "./TextEditor";
+import { ImageEditor } from "./ImageEditor";
 import styles from "./AddBlockModal.module.scss";
 
 type AddBlockModalProps = {
@@ -27,7 +28,7 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
   const [editContentBlocks, setEditContentBlocks] = useRecoilState(
     editContentBlocksAtom
   );
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string | File>("");
 
   const handleClose = useCallback(() => setShowModal(false), [setShowModal]);
 
@@ -55,6 +56,8 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
     switch (contentBlockType) {
       case ContentType.TEXT:
         return <TextEditor value={value} setValue={setValue} />;
+      case ContentType.IMAGE:
+        return <ImageEditor value={value} setValue={setValue} />;
     }
   }, [contentBlockType, value]);
 
@@ -62,8 +65,13 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
     <Modal open={isOpen} onClose={handleClose}>
       <Box className={styles.box}>
         <h3>Add block of type {contentBlockType}</h3>
-        {inputElement}
-        <ButtonWithIcon onClick={handleSave} icon={faSave} text="Save" />
+        <div>{inputElement}</div>
+        <ButtonWithIcon
+          onClick={handleSave}
+          icon={faSave}
+          text="Save"
+          className={styles.saveBtn}
+        />
       </Box>
     </Modal>
   );
