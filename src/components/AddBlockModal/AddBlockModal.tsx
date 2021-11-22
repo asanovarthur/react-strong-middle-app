@@ -28,7 +28,7 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
   const [editContentBlocks, setEditContentBlocks] = useRecoilState(
     editContentBlocksAtom
   );
-  const [value, setValue] = useState<string | File>("");
+  const [value, setValue] = useState<ContentBlock["value"]>("");
 
   const handleClose = useCallback(() => setShowModal(false), [setShowModal]);
 

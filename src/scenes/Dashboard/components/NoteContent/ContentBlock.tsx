@@ -10,7 +10,6 @@ type ContentBlockProps = {
 };
 
 export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
-  console.log(contentBlock.value);
   const [imgUrl, setImgUrl] = useState();
   let component = null;
 
@@ -27,12 +26,6 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
       ) : (
         <CircularProgress />
       );
-      // .catch((err) => console.log(err))
-      // .finally(() => {
-      //   console.log("finally");
-      //   component = <p>loading..</p>;
-      // });
-      console.log("after");
       break;
     case ContentType.TEXT:
     default:
@@ -49,5 +42,5 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
       break;
   }
 
-  return component;
+  return <div className={styles.contentBlock}>{component}</div>;
 };

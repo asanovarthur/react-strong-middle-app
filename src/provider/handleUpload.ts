@@ -28,10 +28,5 @@ export const getImage = (imageName: string, setImgUrl: (url: any) => void) => {
   storage
     .ref(`/images/${imageName}`)
     .getDownloadURL()
-    .then((url) => {
-      console.log("setting");
-      setImgUrl(url);
-    })
-    .catch((err) => console.log(err))
-    .finally(() => console.log("wtf"));
+    .then((url) => setImgUrl(url));
 };
