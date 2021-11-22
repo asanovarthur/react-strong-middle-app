@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import ContentEditable from "react-contenteditable";
+import ReactPlayer from "react-player";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ContentBlock as ContentBlockType, ContentType } from "types";
 import { getImage } from "provider/handleUpload";
@@ -15,7 +16,7 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
 
   useEffect(() => {
     if (contentBlock.type === ContentType.IMAGE) {
-      getImage(contentBlock.value as string, setImgUrl);
+      getImage(contentBlock.value, setImgUrl);
     }
   }, [contentBlock.type, contentBlock.value]);
 
@@ -26,6 +27,9 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
       ) : (
         <CircularProgress />
       );
+      break;
+    case ContentType.VIDEO:
+      component = <ReactPlayer url={contentBlock.value} />;
       break;
     case ContentType.TEXT:
     default:

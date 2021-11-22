@@ -1,7 +1,7 @@
 import { FC, useCallback, useState, useMemo } from "react";
 import { ContentBlock } from "types";
 import { uploadImage } from "provider/handleUpload";
-import styles from "./AddBlockModal.module.scss";
+import styles from "../AddBlockModal.module.scss";
 
 type ImageEditorProps = {
   value: ContentBlock["value"];
@@ -24,6 +24,7 @@ export const ImageEditor: FC<ImageEditorProps> = ({ value, setValue }) => {
 
   const image = useMemo(() => {
     if (!file) return null;
+
     return (
       <img src={URL.createObjectURL(file)} alt="img" className={styles.image} />
     );

@@ -7,8 +7,7 @@ import { ContentBlock, ContentType } from "types";
 import editContentBlocksAtom from "recoil/editContentBlocks";
 import noteAtom from "recoil/note";
 import { ButtonWithIcon } from "components";
-import { TextEditor } from "./TextEditor";
-import { ImageEditor } from "./ImageEditor";
+import { TextEditor, ImageEditor, VideoEditor } from "./components";
 import styles from "./AddBlockModal.module.scss";
 
 type AddBlockModalProps = {
@@ -30,7 +29,10 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
   );
   const [value, setValue] = useState<ContentBlock["value"]>("");
 
-  const handleClose = useCallback(() => setShowModal(false), [setShowModal]);
+  const handleClose = useCallback(() => {
+    setShowModal(false);
+    setValue("");
+  }, [setShowModal]);
 
   const handleSave = useCallback(() => {
     const preparedData: ContentBlock = {
@@ -55,9 +57,12 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
   const inputElement = useMemo(() => {
     switch (contentBlockType) {
       case ContentType.TEXT:
+      default:
         return <TextEditor value={value} setValue={setValue} />;
       case ContentType.IMAGE:
         return <ImageEditor value={value} setValue={setValue} />;
+      case ContentType.VIDEO:
+        return <VideoEditor value={value} setValue={setValue} />;
     }
   }, [contentBlockType, value]);
 
