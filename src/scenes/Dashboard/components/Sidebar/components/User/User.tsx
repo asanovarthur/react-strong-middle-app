@@ -1,4 +1,5 @@
-import { FC, useCallback } from "react";
+import { useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
@@ -6,14 +7,16 @@ import userAtom from "recoil/user";
 import { logout } from "provider/auth";
 import styles from "./User.module.scss";
 
-export const User: FC = () => {
+export const User = () => {
+  const history = useHistory();
   const [user, setUser] = useRecoilState(userAtom);
 
   const exit = useCallback(() => {
     logout();
     window.localStorage.removeItem("userToken");
     setUser({ ...user, isLogged: false });
-  }, [user, setUser]);
+    history.push("/login");
+  }, [user, setUser, history]);
 
   return (
     <div className={styles.user}>

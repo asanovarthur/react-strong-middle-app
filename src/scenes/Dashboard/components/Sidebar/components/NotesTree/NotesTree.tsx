@@ -1,17 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode, useCallback } from "react";
+import { Link, useRouteMatch, useHistory } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { Note } from "types";
 import { useUserNotes } from "dataManagement";
+import noteAtom from "recoil/note";
 import { TreeNode } from "./TreeNode";
 import styles from "./NotesTree.module.scss";
 
+type TreeElements = {
+  data: Note[];
+  view: ReactNode[];
+};
+
 export const NotesTree = () => {
+  const history = useHistory();
+  const { url } = useRouteMatch();
+  const [activeNote, setActiveNote] = useRecoilState(noteAtom);
   const { data } = useUserNotes();
-  const [treeElements, setTreeElements] = useState<any>([]);
+  const [treeElements, setTreeElements] = useState<TreeElements>({
+    data: [],
+    view: [],
+  });
+
+  const updateActiveNote = useCallback(
+    (note: Note) => {
+      setActiveNote(note);
+    },
+    [setActiveNote]
+  );
 
   useEffect(() => {
     const parentElements = data
       .filter((note) => !note.parentId)
-      .sort((note1, note2) => note1.creationDate - note2.creationDate)
-      .map((note) => (
+      .sort((note1, note2) => note1.creationDate - note2.creationDate);
+
+    const parentElementsView = parentElements.map((note) => (
+      // <Link to={`${url}${note.uri}`} onClick={}>
+      <div onClick={() => updateActiveNote(note)}>
         <TreeNode
           name={note.name}
           childNodes={data.filter(
@@ -19,15 +44,21 @@ export const NotesTree = () => {
           )}
           showIcon
         />
-      ));
+      </div>
+      // </Link>
+    ));
 
-    setTreeElements(parentElements);
-  }, [data]);
+    setTreeElements({ data: parentElements, view: parentElementsView });
+
+    if (parentElements.length > 0) {
+      history.push(`${activeNote.uri}`);
+    }
+  }, [data, url, history, activeNote.uri, updateActiveNote]);
 
   return (
     <div className={styles.tree}>
       <div className={styles.header}>NOTES</div>
-      {treeElements}
+      {treeElements.view}
     </div>
   );
 };
