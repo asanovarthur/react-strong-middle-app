@@ -1,7 +1,11 @@
 @import "colors";
 
 .noteWrap {
+  height: 755px;
+  margin-top: 60px;
+  overflow-y: auto;
   padding: 60px 40px;
+  padding-top: 0;
   grid-area: n;
 
   .header {

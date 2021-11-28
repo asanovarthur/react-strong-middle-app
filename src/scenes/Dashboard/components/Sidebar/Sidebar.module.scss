@@ -1,6 +1,7 @@
 @import "colors";
 
 .sidebar {
+  height: 100vh;
   grid-area: s;
   background-color: $tree-grey;
   display: flex;

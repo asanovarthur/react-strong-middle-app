@@ -1,9 +1,10 @@
 import { useState, useEffect, ReactNode, useCallback } from "react";
-import { Link, useRouteMatch, useHistory } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRouteMatch, useHistory } from "react-router-dom";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { Note } from "types";
 import { useUserNotes } from "dataManagement";
 import noteAtom from "recoil/note";
+import editContentBlockAtom from "recoil/editContentBlocks";
 import { TreeNode } from "./TreeNode";
 import styles from "./NotesTree.module.scss";
 
@@ -16,6 +17,7 @@ export const NotesTree = () => {
   const history = useHistory();
   const { url } = useRouteMatch();
   const [activeNote, setActiveNote] = useRecoilState(noteAtom);
+  const setEditContentBlocks = useSetRecoilState(editContentBlockAtom);
   const { data } = useUserNotes();
   const [treeElements, setTreeElements] = useState<TreeElements>({
     data: [],
@@ -25,8 +27,9 @@ export const NotesTree = () => {
   const updateActiveNote = useCallback(
     (note: Note) => {
       setActiveNote(note);
+      setEditContentBlocks([]);
     },
-    [setActiveNote]
+    [setActiveNote, setEditContentBlocks]
   );
 
   useEffect(() => {
@@ -35,7 +38,6 @@ export const NotesTree = () => {
       .sort((note1, note2) => note1.creationDate - note2.creationDate);
 
     const parentElementsView = parentElements.map((note) => (
-      // <Link to={`${url}${note.uri}`} onClick={}>
       <div onClick={() => updateActiveNote(note)}>
         <TreeNode
           name={note.name}
@@ -45,7 +47,6 @@ export const NotesTree = () => {
           showIcon
         />
       </div>
-      // </Link>
     ));
 
     setTreeElements({ data: parentElements, view: parentElementsView });
