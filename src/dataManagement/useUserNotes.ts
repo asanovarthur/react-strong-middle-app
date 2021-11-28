@@ -26,12 +26,13 @@ export const useUserNotes = (): UseUserNotesType => {
       });
 
       setResult(data as Note[]);
-      setActiveNote(
-        (data as Note[])
-          .filter((note) => !note.parentId)
-          .sort((note1, note2) => note1.creationDate - note2.creationDate)[0] ??
-          {}
-      );
+      console.log("KEKES FORM USEUSERNOTES");
+      // setActiveNote(
+      //   (data as Note[])
+      //     .filter((note) => !note.parentId)
+      //     .sort((note1, note2) => note1.creationDate - note2.creationDate)[0] ??
+      //     {}
+      // );
     }
 
     getNotes();

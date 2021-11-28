@@ -24,6 +24,15 @@ export const NotesTree = () => {
     view: [],
   });
 
+  useEffect(() => {
+    setActiveNote(
+      (data as Note[])
+        .filter((note) => !note.parentId)
+        .sort((note1, note2) => note1.creationDate - note2.creationDate)[0] ??
+        {}
+    );
+  }, [data, setActiveNote]);
+
   const updateActiveNote = useCallback(
     (note: Note) => {
       setActiveNote(note);

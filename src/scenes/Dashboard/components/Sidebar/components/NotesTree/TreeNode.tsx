@@ -4,7 +4,8 @@ import {
   faCaretSquareRight,
   faCaretSquareDown,
 } from "@fortawesome/free-solid-svg-icons";
-import { mockNotes } from "../../../../../../mock";
+import { Note } from "types";
+import { mockNotes } from "mock";
 import styles from "./NotesTree.module.scss";
 
 type TreeNodeProps = {
@@ -13,6 +14,8 @@ type TreeNodeProps = {
   className?: string;
   showIcon?: boolean;
   nestingLevel?: number;
+  action?: any;
+  note?: Note;
 };
 
 export const TreeNode: FC<TreeNodeProps> = ({
@@ -20,6 +23,8 @@ export const TreeNode: FC<TreeNodeProps> = ({
   childNodes,
   className,
   showIcon,
+  action,
+  note,
   nestingLevel = 1,
 }) => {
   const hasChildren = childNodes.length > 0;
@@ -38,13 +43,23 @@ export const TreeNode: FC<TreeNodeProps> = ({
             icon={showChildren ? faCaretSquareDown : faCaretSquareRight}
           />
         )}
-        {name}
+        <span
+          onClick={() => {
+            if (action) {
+              action(note);
+            }
+          }}
+        >
+          {name}
+        </span>
       </div>
       {showChildren &&
         (hasChildren ? (
           childNodes.map((node) => (
             <TreeNode
               name={node.name}
+              note={node}
+              action={action}
               childNodes={mockNotes.filter(
                 (childNote) => childNote.parentId === node.id
               )}

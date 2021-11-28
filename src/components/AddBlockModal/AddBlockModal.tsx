@@ -7,7 +7,7 @@ import { ContentBlock, ContentType } from "types";
 import editContentBlocksAtom from "recoil/editContentBlocks";
 import noteAtom from "recoil/note";
 import { ButtonWithIcon } from "components";
-import { TextEditor, ImageEditor, VideoEditor } from "./components";
+import { TextEditor, ImageEditor, VideoEditor, LinkEditor } from "./components";
 import styles from "./AddBlockModal.module.scss";
 
 type AddBlockModalProps = {
@@ -63,6 +63,8 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
         return <ImageEditor value={value} setValue={setValue} />;
       case ContentType.VIDEO:
         return <VideoEditor value={value} setValue={setValue} />;
+      case ContentType.LINK:
+        return <LinkEditor value={value} setValue={setValue} />;
     }
   }, [contentBlockType, value]);
 
