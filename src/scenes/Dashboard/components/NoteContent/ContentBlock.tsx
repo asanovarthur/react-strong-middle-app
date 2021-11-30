@@ -38,8 +38,6 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
         <Link
           to={`/${linkNote?.uri}`}
           onClick={() => {
-            console.log(linkNote.id);
-            console.log(linkNote.name);
             setActiveNote(linkNote);
           }}
         >

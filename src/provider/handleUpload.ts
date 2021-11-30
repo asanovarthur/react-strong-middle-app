@@ -36,8 +36,6 @@ export const getNoteById = async (
   id: Note["id"],
   setNote: (data: any) => void
 ) => {
-  console.log(id);
-
   return await db
     .collection("notes")
     .doc(`${id}`)

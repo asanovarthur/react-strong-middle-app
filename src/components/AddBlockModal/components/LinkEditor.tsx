@@ -1,8 +1,7 @@
-import { FC, useCallback, useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import { ContentBlock, Note } from "types";
 import { useUserNotes } from "dataManagement";
 import { TreeNode } from "scenes/Dashboard/components/Sidebar/components/NotesTree/TreeNode";
-import styles from "../AddBlockModal.module.scss";
 
 type LinkEditorProps = {
   value: ContentBlock["value"];

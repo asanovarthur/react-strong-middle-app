@@ -25,7 +25,6 @@ export const Root = () => {
         : { path: "/login", component: Login }
     );
 
-    console.log("qwe");
     history.push(route.path);
   }, [history, isLogged, route.path]);
 

@@ -10,7 +10,6 @@ type UseContentBlocksType = {
 
 export const useContentBlocks = (): UseContentBlocksType => {
   const { id: activeNoteId } = useRecoilValue(noteAtom);
-  console.log(activeNoteId);
   const [result, setResult] = useState<ContentBlock[]>([]);
 
   useEffect(() => {
