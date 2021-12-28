@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import {
@@ -7,16 +7,22 @@ import {
   faSave,
   faArrowAltCircleLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import { ContentBlock } from "types";
+import { ContentBlock, Note } from "types";
+import { useUserNotes } from "dataManagement";
 import userAtom from "recoil/user";
 import editContentBlockAtom from "recoil/editContentBlocks";
+import { noteAtom, notesAtom } from "recoil/note";
 import { db } from "provider/auth";
 import { ButtonWithIcon } from "components";
 import styles from "./ControlPanel.module.scss";
 
 export const ControlPanel = () => {
+  const { data } = useUserNotes();
   const [user, setUser] = useRecoilState(userAtom);
   const editContentBlocks = useRecoilValue(editContentBlockAtom);
+  const { id: noteId } = useRecoilValue(noteAtom);
+  const setActiveNote = useSetRecoilState(noteAtom);
+  const [notes, setNotes] = useRecoilState(notesAtom);
   const { isInEditMode } = user;
 
   const handleSave = useCallback(() => {
@@ -26,6 +32,30 @@ export const ControlPanel = () => {
       db.collection("contentBlocks").add(contentBlock)
     );
   }, [editContentBlocks]);
+
+  const handleDelete = useCallback(() => {
+    db.collection("notes")
+      .doc(`${noteId}`)
+      .delete()
+      .then(() => {
+        db.collection("contentBlocks")
+          .where("noteId", "==", noteId)
+          .get()
+          .then((snapshot) => {
+            Promise.all(snapshot.docs.map((d) => d.ref.delete()));
+          });
+      })
+      .then(() =>
+        setActiveNote(
+          (data as Note[])
+            .filter((note) => !note.parentId)
+            .sort(
+              (note1, note2) => note1.creationDate - note2.creationDate
+            )[0] ?? {}
+        )
+      )
+      .then(() => setNotes(notes.filter((note) => note.id !== noteId)));
+  }, [noteId, data, setActiveNote, notes, setNotes]);
 
   const switchEditMode = useCallback(
     () => setUser({ ...user, isInEditMode: !isInEditMode }),
@@ -55,6 +85,7 @@ export const ControlPanel = () => {
           disabled={!isInEditMode}
           icon={faTrashAlt}
           text="Delete"
+          onClick={handleDelete}
         />
       </div>
     </div>

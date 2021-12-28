@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { ContentBlock } from "types";
 import { db } from "provider/auth";
-import noteAtom from "recoil/note";
+import { noteAtom } from "recoil/note";
 
 type UseContentBlocksType = {
   data: ContentBlock[];

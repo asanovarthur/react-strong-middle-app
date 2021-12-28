@@ -1,3 +1,3 @@
-import { noteAtom } from "./note";
+import { noteAtom, notesAtom } from "./note";
 
-export default noteAtom;
+export { noteAtom, notesAtom };

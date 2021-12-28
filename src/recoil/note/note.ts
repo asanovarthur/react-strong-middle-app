@@ -5,3 +5,9 @@ export const noteAtom = atom({
   key: "note",
   default: {} as Note,
 });
+
+export const notesAtom = atom({
+  key: "notes",
+  default: [] as Note[],
+});
+

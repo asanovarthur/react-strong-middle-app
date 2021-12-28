@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { ContentBlock, ContentType } from "types";
 import editContentBlocksAtom from "recoil/editContentBlocks";
-import noteAtom from "recoil/note";
+import { noteAtom } from "recoil/note";
 import { ButtonWithIcon } from "components";
 import { TextEditor, ImageEditor, VideoEditor, LinkEditor } from "./components";
 import styles from "./AddBlockModal.module.scss";

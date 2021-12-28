@@ -2,7 +2,7 @@ import { FC, useMemo, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { ContentType } from "types";
 import { useContentBlocks } from "dataManagement";
-import noteAtom from "recoil/note";
+import { noteAtom } from "recoil/note";
 import userAtom from "recoil/user";
 import editContentBlockAtom from "recoil/editContentBlocks";
 import { AddBlockModal } from "components/AddBlockModal";

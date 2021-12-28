@@ -5,7 +5,7 @@ import ReactPlayer from "react-player";
 import { useSetRecoilState } from "recoil";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ContentBlock as ContentBlockType, ContentType, Note } from "types";
-import noteAtom from "recoil/note";
+import { noteAtom } from "recoil/note";
 import { getImage, getNoteById } from "provider/handleUpload";
 import styles from "./NoteContent.module.scss";
 

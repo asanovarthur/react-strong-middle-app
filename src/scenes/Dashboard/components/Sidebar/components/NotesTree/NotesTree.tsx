@@ -1,9 +1,8 @@
 import { useState, useEffect, ReactNode, useCallback } from "react";
 import { useRouteMatch, useHistory } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
 import { Note } from "types";
-import { useUserNotes } from "dataManagement";
-import noteAtom from "recoil/note";
+import { noteAtom, notesAtom } from "recoil/note";
 import editContentBlockAtom from "recoil/editContentBlocks";
 import { TreeNode } from "./TreeNode";
 import styles from "./NotesTree.module.scss";
@@ -18,20 +17,20 @@ export const NotesTree = () => {
   const { url } = useRouteMatch();
   const [activeNote, setActiveNote] = useRecoilState(noteAtom);
   const setEditContentBlocks = useSetRecoilState(editContentBlockAtom);
-  const { data } = useUserNotes();
   const [treeElements, setTreeElements] = useState<TreeElements>({
     data: [],
     view: [],
   });
+  const notes = useRecoilValue(notesAtom);
 
   useEffect(() => {
     setActiveNote(
-      (data as Note[])
+      (notes as Note[])
         .filter((note) => !note.parentId)
         .sort((note1, note2) => note1.creationDate - note2.creationDate)[0] ??
         {}
     );
-  }, [data, setActiveNote]);
+  }, [notes, setActiveNote]);
 
   const updateActiveNote = useCallback(
     (note: Note) => {
@@ -42,7 +41,7 @@ export const NotesTree = () => {
   );
 
   useEffect(() => {
-    const parentElements = data
+    const parentElements = notes
       .filter((note) => !note.parentId)
       .sort((note1, note2) => note1.creationDate - note2.creationDate);
 
@@ -50,7 +49,7 @@ export const NotesTree = () => {
       <div onClick={() => updateActiveNote(note)}>
         <TreeNode
           name={note.name}
-          childNodes={data.filter(
+          childNodes={notes.filter(
             (childNote) => childNote.parentId === note.id
           )}
           showIcon
@@ -63,7 +62,7 @@ export const NotesTree = () => {
     if (parentElements.length > 0) {
       history.push(`${activeNote.uri}`);
     }
-  }, [data, url, history, activeNote.uri, updateActiveNote]);
+  }, [notes, url, history, activeNote.uri, updateActiveNote]);
 
   return (
     <div className={styles.tree}>

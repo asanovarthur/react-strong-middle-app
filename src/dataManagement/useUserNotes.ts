@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { db } from "provider/auth";
 import userAtom from "recoil/user";
-import noteAtom from "recoil/note";
+import { notesAtom } from "recoil/note";
 import { Note } from "types";
 
 type UseUserNotesType = {
@@ -11,25 +11,28 @@ type UseUserNotesType = {
 
 export const useUserNotes = (): UseUserNotesType => {
   const { id: userId } = useRecoilValue(userAtom);
-  const setActiveNote = useSetRecoilState(noteAtom);
+  const [notes, setNotes] = useRecoilState(notesAtom);
   const [result, setResult] = useState<Note[]>([]);
 
   useEffect(() => {
     async function getNotes() {
-      const notes = await db
+      const dbNotes = await db
         .collection("notes")
         .where("userId", "==", userId)
         .get();
 
-      const data = notes.docs.map((item) => {
+      const data = dbNotes.docs.map((item) => {
         return { id: item.id, ...item.data() };
       });
 
-      setResult(data as Note[]);
+      if (data.length !== notes.length) {
+        setResult(data as Note[]);
+        setNotes(data as Note[]);
+      }
     }
 
     getNotes();
-  }, [setActiveNote, userId]);
+  }, [userId, notes, setNotes]);
 
   return { data: result };
 };
