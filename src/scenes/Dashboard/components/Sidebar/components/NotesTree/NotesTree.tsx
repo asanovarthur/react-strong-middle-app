@@ -3,6 +3,7 @@ import { useRouteMatch, useHistory } from "react-router-dom";
 import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
 import { Note } from "types";
 import { noteAtom, notesAtom } from "recoil/note";
+import userAtom from "recoil/user";
 import editContentBlockAtom from "recoil/editContentBlocks";
 import { TreeNode } from "./TreeNode";
 import styles from "./NotesTree.module.scss";
@@ -22,6 +23,7 @@ export const NotesTree = () => {
     view: [],
   });
   const notes = useRecoilValue(notesAtom);
+  const [user, setUser] = useRecoilState(userAtom);
 
   useEffect(() => {
     setActiveNote(
@@ -32,12 +34,18 @@ export const NotesTree = () => {
     );
   }, [notes, setActiveNote]);
 
+  const switchEditMode = useCallback(
+    () => setUser({ ...user, isInEditMode: false }),
+    [user, setUser]
+  );
+
   const updateActiveNote = useCallback(
     (note: Note) => {
       setActiveNote(note);
       setEditContentBlocks([]);
+      switchEditMode();
     },
-    [setActiveNote, setEditContentBlocks]
+    [setActiveNote, setEditContentBlocks, switchEditMode]
   );
 
   useEffect(() => {
