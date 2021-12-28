@@ -18,7 +18,7 @@ export const handleUpload = async (contentType: ContentType, value: any) => {
 };
 
 export const uploadImage = (file: File) => {
-  const ref = storage.ref(`/images/${file.name}`);
+  const ref = storage.ref(`/${file.name}`);
   const uploadTask = ref.put(file);
   uploadTask.on("state_changed", console.log, console.error, () =>
     ref.getDownloadURL()
@@ -27,7 +27,7 @@ export const uploadImage = (file: File) => {
 
 export const getImage = (imageName: string, setImgUrl: (url: any) => void) => {
   storage
-    .ref(`/images/${imageName}`)
+    .ref(`/${imageName}`)
     .getDownloadURL()
     .then((url) => setImgUrl(url));
 };
