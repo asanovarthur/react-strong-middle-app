@@ -26,12 +26,12 @@ export const VideoEditor: FC<VideoEditorProps> = ({ value, setValue }) => {
     <>
       <OutlinedInput
         placeholder="Please enter uri"
-        value={uri}
+        value={value ?? uri}
         onChange={handleChange}
       />
-      {uri && (
+      {(!!value || !!uri) && (
         <ReactPlayer
-          url={uri}
+          url={value ?? uri}
           className={styles.player}
           height="250px"
           width="400px"

@@ -2,13 +2,14 @@ import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ContentEditable from "react-contenteditable";
 import ReactPlayer from "react-player";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ContentBlock as ContentBlockType, ContentType, Note } from "types";
 import { noteAtom } from "recoil/note";
+import userAtom from "recoil/user";
 import { getImage, getNoteById } from "provider/handleUpload";
+import { EditModal } from "./EditModal";
 import styles from "./NoteContent.module.scss";
-
 type ContentBlockProps = {
   contentBlock: ContentBlockType;
 };
@@ -17,6 +18,9 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
   const setActiveNote = useSetRecoilState(noteAtom);
   const [imgUrl, setImgUrl] = useState();
   const [linkNote, setLinkNote] = useState<Note>({} as Note);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const user = useRecoilValue(userAtom);
+  const { isInEditMode } = user;
   let component = null;
 
   useEffect(() => {
@@ -70,5 +74,19 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
       break;
   }
 
-  return <div className={styles.contentBlock}>{component}</div>;
+  return (
+    <>
+      <div className={styles.contentBlock}>{component}</div>
+      {isInEditMode && (
+        <button onClick={() => setShowEditModal(true)}>edit</button>
+      )}
+      {showEditModal && (
+        <EditModal
+          contentBlock={contentBlock}
+          isOpen={showEditModal}
+          setShowModal={setShowEditModal}
+        />
+      )}
+    </>
+  );
 };

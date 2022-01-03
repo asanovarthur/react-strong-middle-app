@@ -4,6 +4,6 @@ export interface ContentBlock {
   id?: number | string;
   noteId: number | string;
   type: ContentType;
-  value: string;
+  value: any;
   order: number;
 }

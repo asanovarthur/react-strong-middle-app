@@ -12,7 +12,7 @@ type UseUserNotesType = {
 export const useUserNotes = (): UseUserNotesType => {
   const { id: userId } = useRecoilValue(userAtom);
   const [notes, setNotes] = useRecoilState(notesAtom);
-  const [result, setResult] = useState<Note[]>([]);
+  const [result, setResult] = useState<Note[]>(notes);
 
   useEffect(() => {
     async function getNotes() {

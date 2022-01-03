@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { ContentBlock } from "types";
 import { db } from "provider/auth";
 import { noteAtom } from "recoil/note";
+import contentBlocksAtom from "recoil/contentBlocks";
 
 type UseContentBlocksType = {
   data: ContentBlock[];
@@ -10,22 +11,36 @@ type UseContentBlocksType = {
 
 export const useContentBlocks = (): UseContentBlocksType => {
   const { id: activeNoteId } = useRecoilValue(noteAtom);
+  const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
   const [result, setResult] = useState<ContentBlock[]>([]);
 
   useEffect(() => {
     async function getContentBlocks() {
-      const contentBlocks = await db
+      const dbContentBlocks = await db
         .collection("contentBlocks")
         .where("noteId", "==", activeNoteId ?? -1)
         .get();
 
-      const data = contentBlocks.docs.map((item) => item.data());
+      const data = dbContentBlocks.docs.map((item) => {
+        return { id: item.id, ...item.data() };
+      });
 
-      setResult(data as ContentBlock[]);
+      if (
+        data.length !== contentBlocks.length ||
+        (data.length > 0 &&
+          contentBlocks.length > 0 &&
+          (data as ContentBlock[])[0].noteId !==
+            (contentBlocks as ContentBlock[])[0].noteId)
+      ) {
+        setResult((data as ContentBlock[]).sort((a, b) => a.order - b.order));
+        setContentBlocks(
+          (data as ContentBlock[]).sort((a, b) => a.order - b.order)
+        );
+      }
     }
 
     getContentBlocks();
-  }, [activeNoteId]);
+  }, [activeNoteId, setContentBlocks, contentBlocks.length, contentBlocks]);
 
   return { data: result };
 };

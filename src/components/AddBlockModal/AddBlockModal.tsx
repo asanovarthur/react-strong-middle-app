@@ -6,6 +6,7 @@ import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { ContentBlock, ContentType } from "types";
 import editContentBlocksAtom from "recoil/editContentBlocks";
 import { noteAtom } from "recoil/note";
+import { uploadImage } from "provider/handleUpload";
 import { ButtonWithIcon } from "components";
 import { TextEditor, ImageEditor, VideoEditor, LinkEditor } from "./components";
 import styles from "./AddBlockModal.module.scss";
@@ -42,8 +43,15 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
       value,
     };
 
-    setEditContentBlocks([...editContentBlocks, preparedData]);
-    handleClose();
+    const finishSaving = () => {
+      setEditContentBlocks([...editContentBlocks, preparedData]);
+      handleClose();
+    };
+
+    if (contentBlockType === ContentType.IMAGE) {
+      preparedData.value = value.name;
+      uploadImage(value).then(() => finishSaving());
+    } else finishSaving();
   }, [
     value,
     contentBlockType,

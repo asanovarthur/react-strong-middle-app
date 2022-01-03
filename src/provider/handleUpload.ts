@@ -20,16 +20,17 @@ export const handleUpload = async (contentType: ContentType, value: any) => {
 export const uploadImage = (file: File) => {
   const ref = storage.ref(`/${file.name}`);
   const uploadTask = ref.put(file);
-  uploadTask.on("state_changed", console.log, console.error, () =>
-    ref.getDownloadURL()
-  );
+
+  return uploadTask;
 };
 
 export const getImage = (imageName: string, setImgUrl: (url: any) => void) => {
   storage
     .ref(`/${imageName}`)
     .getDownloadURL()
-    .then((url) => setImgUrl(url));
+    .then((url) => {
+      setImgUrl(url);
+    });
 };
 
 export const getNoteById = async (

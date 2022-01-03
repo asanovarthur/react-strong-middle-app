@@ -1,6 +1,6 @@
 import { FC, useState, useEffect, useMemo } from "react";
 import { ContentBlock, Note } from "types";
-import { useUserNotes } from "dataManagement";
+import { useUserNotes, useUserNote } from "dataManagement";
 import { TreeNode } from "scenes/Dashboard/components/Sidebar/components/NotesTree/TreeNode";
 
 type LinkEditorProps = {
@@ -11,6 +11,8 @@ type LinkEditorProps = {
 export const LinkEditor: FC<LinkEditorProps> = ({ value, setValue }) => {
   const { data } = useUserNotes();
   const [link, setLink] = useState<Note>();
+
+  const { data: note } = useUserNote(value);
 
   const select = useMemo(() => {
     const parentElements = data
@@ -39,8 +41,8 @@ export const LinkEditor: FC<LinkEditorProps> = ({ value, setValue }) => {
   return (
     <>
       {select}
-      <p>{link?.name}</p>
-      <p>{link?.uri}</p>
+      <p>{(note ?? link ?? {}).name}</p>
+      <p>{(note ?? link ?? {}).uri}</p>
     </>
   );
 };

@@ -11,6 +11,7 @@ import { ContentBlock, Note } from "types";
 import { useUserNotes } from "dataManagement";
 import userAtom from "recoil/user";
 import editContentBlockAtom from "recoil/editContentBlocks";
+import contentBlocksAtom from "recoil/contentBlocks";
 import { noteAtom, notesAtom } from "recoil/note";
 import { db } from "provider/auth";
 import { ButtonWithIcon } from "components";
@@ -20,18 +21,30 @@ export const ControlPanel = () => {
   const { data } = useUserNotes();
   const [user, setUser] = useRecoilState(userAtom);
   const editContentBlocks = useRecoilValue(editContentBlockAtom);
+  const contentBlocks = useRecoilValue(contentBlocksAtom);
   const { id: noteId } = useRecoilValue(noteAtom);
   const setActiveNote = useSetRecoilState(noteAtom);
   const [notes, setNotes] = useRecoilState(notesAtom);
   const { isInEditMode } = user;
 
   const handleSave = useCallback(() => {
+    const dbCollection = db.collection("contentBlocks");
+    const updatedBlocks = contentBlocks.filter(
+      (block) => block.value !== dbCollection.doc(`${block.id}`)
+    );
+
+    if (updatedBlocks.length > 0) {
+      updatedBlocks.forEach((block) =>
+        dbCollection.doc(`${block.id}`).set(block)
+      );
+    }
+
     if (editContentBlocks.length < 1) return;
 
     editContentBlocks.forEach((contentBlock: ContentBlock) =>
       db.collection("contentBlocks").add(contentBlock)
     );
-  }, [editContentBlocks]);
+  }, [editContentBlocks, contentBlocks]);
 
   const handleDelete = useCallback(() => {
     db.collection("notes")
