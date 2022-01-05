@@ -1,6 +1,7 @@
 import { FC, useCallback, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import OutlinedInput from "@mui/material/OutlinedInput";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilValue, useRecoilState } from "recoil";
 import userAtom from "recoil/user";
@@ -45,7 +46,11 @@ export const AddNoteModal: FC<AddNoteModalProps> = ({
     <Modal open={isOpen} onClose={handleClose}>
       <Box className={styles.box}>
         <h3>Add note</h3>
-        <input type="text" onChange={(e) => setNoteName(e.target.value)} />
+        <OutlinedInput
+          onChange={(e: any) => setNoteName(e.target.value)}
+          autoFocus
+          placeholder="Please enter note title"
+        />
         <br />
         <ButtonWithIcon
           onClick={handleSave}

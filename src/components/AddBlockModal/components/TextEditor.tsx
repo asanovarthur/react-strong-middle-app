@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from "react";
+import { FC, useCallback, useMemo, useRef, useEffect } from "react";
 import ContentEditable, { Props } from "react-contenteditable";
 import { ContentBlock } from "types";
 import { buttonsConfig } from "../constants";
@@ -11,6 +11,12 @@ type TextEditorProps = {
 };
 
 export const TextEditor: FC<TextEditorProps> = ({ value, setValue }) => {
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    (ref.current as HTMLInputElement).focus();
+  }, [ref]);
+
   const handleChange: Props["onChange"] = useCallback(
     (evt) => {
       setValue(evt.target.value);
@@ -35,6 +41,7 @@ export const TextEditor: FC<TextEditorProps> = ({ value, setValue }) => {
     <>
       {editButtons}
       <ContentEditable
+        innerRef={ref}
         onChange={handleChange}
         html={value}
         className={styles.editable}

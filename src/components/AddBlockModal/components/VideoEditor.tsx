@@ -25,6 +25,7 @@ export const VideoEditor: FC<VideoEditorProps> = ({ value, setValue }) => {
   return (
     <>
       <OutlinedInput
+        autoFocus
         placeholder="Please enter uri"
         value={value ?? uri}
         onChange={handleChange}
