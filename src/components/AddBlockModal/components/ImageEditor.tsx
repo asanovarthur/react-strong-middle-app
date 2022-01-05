@@ -1,7 +1,13 @@
 import { FC, useCallback, useState, useMemo } from "react";
+import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 import { ContentBlock } from "types";
 import { getImage } from "provider/handleUpload";
 import styles from "../AddBlockModal.module.scss";
+
+const Input = styled("input")({
+  display: "none",
+});
 
 type ImageEditorProps = {
   value: ContentBlock["value"];
@@ -36,7 +42,12 @@ export const ImageEditor: FC<ImageEditorProps> = ({ value, setValue }) => {
 
   return (
     <>
-      <input type="file" onChange={handleChange} />
+      <label htmlFor="contained-button-file">
+        <Input id="contained-button-file" type="file" onChange={handleChange} />
+        <Button variant="outlined" component="span">
+          Upload
+        </Button>
+      </label>
       {image}
     </>
   );
