@@ -21,7 +21,12 @@ export const TextEditor: FC<TextEditorProps> = ({ value, setValue }) => {
   const editButtons = useMemo(
     () =>
       buttonsConfig.map((btn) => (
-        <EditButton cmd={btn.cmd} name={btn.name} arg={btn.arg} />
+        <EditButton
+          key={btn.name}
+          cmd={btn.cmd}
+          name={btn.name}
+          arg={btn.arg}
+        />
       )),
     []
   );

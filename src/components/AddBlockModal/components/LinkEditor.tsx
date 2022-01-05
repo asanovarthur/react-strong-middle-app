@@ -21,16 +21,20 @@ export const LinkEditor: FC<LinkEditorProps> = ({ value, setValue }) => {
 
     const parentElementsView = parentElements.map((note) => (
       <TreeNode
+        key={note.id}
         name={note.name}
         childNodes={data.filter((childNote) => childNote.parentId === note.id)}
         showIcon
         note={note}
         action={setLink}
+        nestingLevel={0}
       />
     ));
 
     return parentElementsView;
   }, [data]);
+
+  const noteName = useMemo(() => (note ?? link ?? {}).name, [note, link]);
 
   useEffect(() => {
     if (link?.id) {
@@ -41,8 +45,7 @@ export const LinkEditor: FC<LinkEditorProps> = ({ value, setValue }) => {
   return (
     <>
       {select}
-      <p>{(note ?? link ?? {}).name}</p>
-      <p>{(note ?? link ?? {}).uri}</p>
+      {noteName && <p>Chosen note: {noteName}</p>}
     </>
   );
 };

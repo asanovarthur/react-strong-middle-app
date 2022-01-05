@@ -36,7 +36,9 @@ export const ContentBlockAdder: FC<ContentBlockAdderProps> = ({
           label="contentBlockSelector"
         >
           {Object.keys(ContentType).map((contentType) => (
-            <MenuItem value={contentType}>{contentType}</MenuItem>
+            <MenuItem key={contentType} value={contentType}>
+              {contentType}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>

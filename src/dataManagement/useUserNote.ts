@@ -11,9 +11,11 @@ export const useUserNote = (id: Note["id"]): UseUserNoteType => {
 
   useEffect(() => {
     async function getNote() {
-      const note = (await db.collection("notes").doc(`${id}`).get()).data();
+      if (id) {
+        const note = (await db.collection("notes").doc(`${id}`).get()).data();
 
-      setResult(note as Note);
+        setResult(note as Note);
+      }
     }
 
     getNote();
