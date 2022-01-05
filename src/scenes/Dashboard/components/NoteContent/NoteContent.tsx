@@ -27,7 +27,7 @@ export const NoteContent: FC = () => {
   );
 
   const contentBlocksView = useMemo(
-    () => contentBlocks.map((block) => <ContentBlock contentBlock={block} />),
+    () => contentBlocks.displayed.map((block) => <ContentBlock contentBlock={block} />),
     [contentBlocks]
   );
 

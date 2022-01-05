@@ -29,14 +29,17 @@ export const ControlPanel = () => {
 
   const handleSave = useCallback(() => {
     const dbCollection = db.collection("contentBlocks");
-    const updatedBlocks = contentBlocks.filter(
-      (block) => block.value !== dbCollection.doc(`${block.id}`)
-    );
+    const updatedBlocks = contentBlocks.updated;
+    const deletedBlocks = contentBlocks.deleted;
 
     if (updatedBlocks.length > 0) {
       updatedBlocks.forEach((block) =>
-        dbCollection.doc(`${block.id}`).set(block)
+        dbCollection.doc(`${block.id}`).update({ value: block.value })
       );
+    }
+
+    if (deletedBlocks.length > 0) {
+      deletedBlocks.forEach((id) => dbCollection.doc(`${id}`).delete());
     }
 
     if (editContentBlocks.length < 1) return;

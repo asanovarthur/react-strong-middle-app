@@ -23,24 +23,32 @@ export const useContentBlocks = (): UseContentBlocksType => {
 
       const data = dbContentBlocks.docs.map((item) => {
         return { id: item.id, ...item.data() };
-      });
+      }) as ContentBlock[];
+
+      if (contentBlocks.updated.length > 0 || contentBlocks.deleted.length > 0)
+        return;
 
       if (
-        data.length !== contentBlocks.length ||
+        data.length !== contentBlocks.displayed.length ||
         (data.length > 0 &&
-          contentBlocks.length > 0 &&
-          (data as ContentBlock[])[0].noteId !==
-            (contentBlocks as ContentBlock[])[0].noteId)
+          contentBlocks.displayed.length > 0 &&
+          data[0].noteId !== contentBlocks.displayed[0].noteId)
       ) {
-        setResult((data as ContentBlock[]).sort((a, b) => a.order - b.order));
-        setContentBlocks(
-          (data as ContentBlock[]).sort((a, b) => a.order - b.order)
-        );
+        setResult(data.sort((a, b) => a.order - b.order));
+        setContentBlocks({
+          ...contentBlocks,
+          displayed: data.sort((a, b) => a.order - b.order),
+        });
       }
     }
 
     getContentBlocks();
-  }, [activeNoteId, setContentBlocks, contentBlocks.length, contentBlocks]);
+  }, [
+    activeNoteId,
+    setContentBlocks,
+    contentBlocks.displayed.length,
+    contentBlocks,
+  ]);
 
   return { data: result };
 };

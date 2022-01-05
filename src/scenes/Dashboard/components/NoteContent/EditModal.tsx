@@ -37,26 +37,34 @@ export const EditModal: FC<EditModalProps> = ({
   }, [setShowModal, contentBlock.value]);
 
   const handleSave = useCallback(() => {
-    const index = contentBlocks.findIndex(
+    const index = contentBlocks.displayed.findIndex(
       (block) => block.order === contentBlock.order
     );
-    const updatedContentBlocks = contentBlocks.slice();
-    if (contentBlock.type === ContentType.IMAGE) {
-      updatedContentBlocks[index] = {
-        ...contentBlocks[index],
-        value: value.name,
-      };
-      uploadImage(value).then(() => {
-        setContentBlocks(updatedContentBlocks);
-        handleClose();
+    const updatedContentBlocks = contentBlocks.displayed.slice();
+    const newValue =
+      contentBlock.type === ContentType.IMAGE ? value.name : value;
+
+    const finishSaving = () => {
+      setContentBlocks({
+        ...contentBlocks,
+        displayed: updatedContentBlocks,
+        updated: [
+          ...contentBlocks.updated,
+          { id: contentBlock.id, value: newValue },
+        ],
       });
-    } else {
-      updatedContentBlocks[index] = {
-        ...contentBlocks[index],
-        value,
-      };
-      setContentBlocks(updatedContentBlocks);
       handleClose();
+    };
+
+    updatedContentBlocks[index] = {
+      ...contentBlocks.displayed[index],
+      value: newValue,
+    };
+
+    if (contentBlock.type === ContentType.IMAGE) {
+      uploadImage(value).then(() => finishSaving());
+    } else {
+      finishSaving();
     }
   }, [
     handleClose,
@@ -65,6 +73,7 @@ export const EditModal: FC<EditModalProps> = ({
     contentBlocks,
     setContentBlocks,
     contentBlock.order,
+    contentBlock.id,
   ]);
 
   const inputElement = useMemo(() => {
