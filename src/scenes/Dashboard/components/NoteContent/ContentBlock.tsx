@@ -4,6 +4,8 @@ import ContentEditable from "react-contenteditable";
 import ReactPlayer from "react-player";
 import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
 import CircularProgress from "@mui/material/CircularProgress";
+import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ContentBlock as ContentBlockType, ContentType, Note } from "types";
 import { noteAtom } from "recoil/note";
 import userAtom from "recoil/user";
@@ -74,27 +76,35 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
     case ContentType.TEXT:
     default:
       component = (
-        <div className={styles.contentBlock}>
-          <ContentEditable
-            className={styles.editable}
-            html={contentBlock.value as string}
-            disabled={true}
-            onChange={() => {}}
-          />
-        </div>
+        <ContentEditable
+          className={styles.editable}
+          html={contentBlock.value as string}
+          disabled={true}
+          onChange={() => {}}
+        />
       );
       break;
   }
 
   return (
     <>
-      <div className={styles.contentBlock}>{component}</div>
-      {isInEditMode && (
-        <>
-          <button onClick={() => setShowEditModal(true)}>edit</button>
-          <button onClick={handleDelete}>delete</button>
-        </>
-      )}
+      <div className={styles.contentBlock}>
+        {component}
+        {isInEditMode && (
+          <>
+            <FontAwesomeIcon
+              onClick={() => setShowEditModal(true)}
+              icon={faEdit}
+              color="#1976D2"
+            />
+            <FontAwesomeIcon
+              onClick={handleDelete}
+              icon={faTrashAlt}
+              color="#1976D2"
+            />
+          </>
+        )}
+      </div>
       {showEditModal && (
         <EditModal
           contentBlock={contentBlock}

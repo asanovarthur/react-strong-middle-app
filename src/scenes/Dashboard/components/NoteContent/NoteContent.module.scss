@@ -18,11 +18,17 @@
   .contentBlock {
     font-family: "Georgia", serif;
     margin-bottom: 20px;
+    display: flex;
+
+    svg {
+      cursor: pointer;
+      margin-left: 10px;
+      font-size: 20px;
+    }
   }
 }
 
 .contentBlockAdder {
   display: flex;
   align-items: center;
-  margin-top: 20px;
 }
