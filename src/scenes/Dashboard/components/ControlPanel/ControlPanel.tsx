@@ -29,20 +29,17 @@ export const ControlPanel = () => {
 
   const handleSave = useCallback(() => {
     const dbCollection = db.collection("contentBlocks");
-    const updatedBlocks = contentBlocks.updated;
-    const deletedBlocks = contentBlocks.deleted;
+    let order = 1;
 
-    if (updatedBlocks.length > 0) {
-      updatedBlocks.forEach((block) =>
-        dbCollection.doc(`${block.id}`).update({ value: block.value })
-      );
-    }
+    contentBlocks.displayed.forEach((block) =>
+      dbCollection.doc(`${block.id}`).update({ order: order++ })
+    );
 
-    if (deletedBlocks.length > 0) {
-      deletedBlocks.forEach((id) => dbCollection.doc(`${id}`).delete());
-    }
+    contentBlocks.updated.forEach((block) =>
+      dbCollection.doc(`${block.id}`).update({ value: block.value })
+    );
 
-    if (editContentBlocks.length < 1) return;
+    contentBlocks.deleted.forEach((id) => dbCollection.doc(`${id}`).delete());
 
     editContentBlocks.forEach((contentBlock: ContentBlock) =>
       db.collection("contentBlocks").add(contentBlock)
