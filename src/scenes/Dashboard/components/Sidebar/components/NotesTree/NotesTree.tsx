@@ -1,10 +1,11 @@
 import { useState, useEffect, ReactNode, useCallback } from "react";
 import { useRouteMatch, useHistory } from "react-router-dom";
-import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Note } from "types";
+import { useContentBlocks } from "dataManagement";
 import { noteAtom, notesAtom } from "recoil/note";
 import userAtom from "recoil/user";
-import editContentBlockAtom from "recoil/editContentBlocks";
+import contentBlocksAtom from "recoil/contentBlocks";
 import { TreeNode } from "./TreeNode";
 import styles from "./NotesTree.module.scss";
 
@@ -17,13 +18,14 @@ export const NotesTree = () => {
   const history = useHistory();
   const { url } = useRouteMatch();
   const [activeNote, setActiveNote] = useRecoilState(noteAtom);
-  const setEditContentBlocks = useSetRecoilState(editContentBlockAtom);
+  const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
   const [treeElements, setTreeElements] = useState<TreeElements>({
     data: [],
     view: [],
   });
   const notes = useRecoilValue(notesAtom);
   const [user, setUser] = useRecoilState(userAtom);
+  const { data } = useContentBlocks();
 
   useEffect(() => {
     setActiveNote(
@@ -42,10 +44,10 @@ export const NotesTree = () => {
   const updateActiveNote = useCallback(
     (note: Note) => {
       setActiveNote(note);
-      setEditContentBlocks([]);
+      setContentBlocks({ ...contentBlocks, edited: [], displayed: data });
       switchEditMode();
     },
-    [setActiveNote, setEditContentBlocks, switchEditMode]
+    [setActiveNote, setContentBlocks, switchEditMode, contentBlocks, data]
   );
 
   useEffect(() => {

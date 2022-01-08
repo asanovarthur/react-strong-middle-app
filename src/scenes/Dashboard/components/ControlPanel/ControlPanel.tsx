@@ -10,7 +10,6 @@ import {
 import { ContentBlock, Note } from "types";
 import { useUserNotes } from "dataManagement";
 import userAtom from "recoil/user";
-import editContentBlockAtom from "recoil/editContentBlocks";
 import contentBlocksAtom from "recoil/contentBlocks";
 import { noteAtom, notesAtom } from "recoil/note";
 import { db } from "provider/auth";
@@ -20,8 +19,7 @@ import styles from "./ControlPanel.module.scss";
 export const ControlPanel = () => {
   const { data } = useUserNotes();
   const [user, setUser] = useRecoilState(userAtom);
-  const editContentBlocks = useRecoilValue(editContentBlockAtom);
-  const contentBlocks = useRecoilValue(contentBlocksAtom);
+  const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
   const { id: noteId } = useRecoilValue(noteAtom);
   const setActiveNote = useSetRecoilState(noteAtom);
   const [notes, setNotes] = useRecoilState(notesAtom);
@@ -41,10 +39,32 @@ export const ControlPanel = () => {
 
     contentBlocks.deleted.forEach((id) => dbCollection.doc(`${id}`).delete());
 
-    editContentBlocks.forEach((contentBlock: ContentBlock) =>
-      db.collection("contentBlocks").add(contentBlock)
-    );
-  }, [editContentBlocks, contentBlocks]);
+    let editContentBlocksProcessed = 0;
+    contentBlocks.edited.forEach((contentBlock: ContentBlock) => {
+      db.collection("contentBlocks")
+        .add(contentBlock)
+        .then(async () => {
+          const newBlocks = await db
+            .collection("contentBlocks")
+            .where("noteId", "==", noteId ?? -1)
+            .get();
+
+          const newData = newBlocks.docs.map((item) => {
+            return { id: item.id, ...item.data() };
+          }) as ContentBlock[];
+
+          editContentBlocksProcessed++;
+
+          if (editContentBlocksProcessed === contentBlocks.edited.length) {
+            setContentBlocks({
+              ...contentBlocks,
+              displayed: newData.sort((a, b) => a.order - b.order),
+              edited: [],
+            });
+          }
+        });
+    });
+  }, [contentBlocks, setContentBlocks, noteId]);
 
   const handleDelete = useCallback(() => {
     db.collection("notes")

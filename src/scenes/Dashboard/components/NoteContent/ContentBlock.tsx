@@ -1,31 +1,39 @@
-import { FC, useEffect, useState, useCallback } from "react";
+import { FC, useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import ContentEditable from "react-contenteditable";
 import ReactPlayer from "react-player";
-import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import CircularProgress from "@mui/material/CircularProgress";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ContentBlock as ContentBlockType, ContentType, Note } from "types";
 import { noteAtom } from "recoil/note";
 import userAtom from "recoil/user";
-import contentBlocksAtom from "recoil/contentBlocks";
 import { getImage, getNoteById } from "provider/handleUpload";
 import { EditModal } from "./EditModal";
+import { videoPlayerEditModeStyle } from "./constants";
 import styles from "./NoteContent.module.scss";
+
 type ContentBlockProps = {
   contentBlock: ContentBlockType;
+  showEditModal: boolean;
+  setShowEditModal: (flag: boolean) => void;
 };
 
-export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
+export const ContentBlock: FC<ContentBlockProps> = ({
+  contentBlock,
+  showEditModal,
+  setShowEditModal,
+}) => {
   const setActiveNote = useSetRecoilState(noteAtom);
-  const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
   const [imgUrl, setImgUrl] = useState();
   const [linkNote, setLinkNote] = useState<Note>({} as Note);
-  const [showEditModal, setShowEditModal] = useState(false);
   const user = useRecoilValue(userAtom);
   const { isInEditMode } = user;
   let component = null;
+
+  const videoBlockStyle = useMemo(
+    () => (isInEditMode ? videoPlayerEditModeStyle : undefined),
+    [isInEditMode]
+  );
 
   useEffect(() => {
     switch (contentBlock.type) {
@@ -39,16 +47,6 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
         break;
     }
   }, [contentBlock.type, contentBlock.value]);
-
-  const handleDelete = useCallback(() => {
-    setContentBlocks({
-      ...contentBlocks,
-      displayed: contentBlocks.displayed.filter(
-        (block) => block.id !== contentBlock.id
-      ),
-      deleted: [...contentBlocks.deleted, contentBlock.id],
-    });
-  }, [contentBlock.id, contentBlocks, setContentBlocks]);
 
   switch (contentBlock.type) {
     case ContentType.LINK:
@@ -71,7 +69,13 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
       );
       break;
     case ContentType.VIDEO:
-      component = <ReactPlayer url={contentBlock.value} />;
+      component = (
+        <ReactPlayer
+          url={contentBlock.value}
+          style={videoBlockStyle}
+          controls
+        />
+      );
       break;
     case ContentType.TEXT:
     default:
@@ -88,23 +92,7 @@ export const ContentBlock: FC<ContentBlockProps> = ({ contentBlock }) => {
 
   return (
     <>
-      <div className={styles.contentBlock}>
-        {component}
-        {isInEditMode && (
-          <>
-            <FontAwesomeIcon
-              onClick={() => setShowEditModal(true)}
-              icon={faEdit}
-              color="#1976D2"
-            />
-            <FontAwesomeIcon
-              onClick={handleDelete}
-              icon={faTrashAlt}
-              color="#1976D2"
-            />
-          </>
-        )}
-      </div>
+      <div className={styles.contentBlock}>{component}</div>
       {showEditModal && (
         <EditModal
           contentBlock={contentBlock}

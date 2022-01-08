@@ -1,12 +1,21 @@
 @import "colors";
 
 .noteWrap {
+  width: fit-content;
   height: 755px;
   margin-top: 60px;
   overflow-y: auto;
   padding: 60px 40px;
   padding-top: 0;
   grid-area: n;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  div[data-rbd-droppable-id="droppable"] {
+    width: fit-content;
+  }
 
   .header {
     font-size: 40px;
@@ -19,16 +28,20 @@
     font-family: "Georgia", serif;
     margin-bottom: 20px;
     display: flex;
-
-    svg {
-      cursor: pointer;
-      margin-left: 10px;
-      font-size: 20px;
-    }
   }
 }
 
 .contentBlockAdder {
   display: flex;
   align-items: center;
+}
+
+.draggableWrap {
+  display: flex;
+
+  svg {
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 20px;
+  }
 }

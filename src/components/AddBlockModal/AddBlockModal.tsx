@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { ContentBlock, ContentType } from "types";
-import editContentBlocksAtom from "recoil/editContentBlocks";
+import contentBlocksAtom from "recoil/contentBlocks";
 import { noteAtom } from "recoil/note";
 import { uploadImage } from "provider/handleUpload";
 import { ButtonWithIcon } from "components";
@@ -25,9 +25,7 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
   maxBlockOrder,
 }) => {
   const { id: noteId } = useRecoilValue(noteAtom);
-  const [editContentBlocks, setEditContentBlocks] = useRecoilState(
-    editContentBlocksAtom
-  );
+  const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
   const [value, setValue] = useState<ContentBlock["value"]>("");
 
   const handleClose = useCallback(() => {
@@ -44,7 +42,11 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
     };
 
     const finishSaving = () => {
-      setEditContentBlocks([...editContentBlocks, preparedData]);
+      setContentBlocks({
+        ...contentBlocks,
+        displayed: [...contentBlocks.displayed, preparedData],
+        edited: [...contentBlocks.edited, preparedData],
+      });
       handleClose();
     };
 
@@ -57,8 +59,8 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
     contentBlockType,
     maxBlockOrder,
     noteId,
-    editContentBlocks,
-    setEditContentBlocks,
+    contentBlocks,
+    setContentBlocks,
     handleClose,
   ]);
 

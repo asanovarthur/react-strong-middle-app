@@ -29,7 +29,7 @@ export const useContentBlocks = (): UseContentBlocksType => {
         return;
 
       if (
-        data.length !== contentBlocks.displayed.length ||
+        (data.length > 0 && contentBlocks.displayed.length < 1) ||
         (data.length > 0 &&
           contentBlocks.displayed.length > 0 &&
           data[0].noteId !== contentBlocks.displayed[0].noteId)

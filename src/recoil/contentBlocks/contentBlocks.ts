@@ -9,5 +9,6 @@ export const contentBlocksAtom = atom({
     displayed: [] as ContentBlock[],
     updated: [] as UpdatedBlock[],
     deleted: [] as ContentBlock["id"][],
+    edited: [] as ContentBlock[],
   },
 });
