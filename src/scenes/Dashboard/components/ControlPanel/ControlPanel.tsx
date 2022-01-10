@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -6,6 +6,7 @@ import {
   faTrashAlt,
   faSave,
   faArrowAltCircleLeft,
+  faClipboard,
 } from "@fortawesome/free-solid-svg-icons";
 import { ContentBlock, Note } from "types";
 import { useUserNotes } from "dataManagement";
@@ -14,6 +15,7 @@ import contentBlocksAtom from "recoil/contentBlocks";
 import { noteAtom, notesAtom } from "recoil/note";
 import { db } from "provider/auth";
 import { ButtonWithIcon } from "components";
+import { EditNoteModal } from "./EditNoteModal";
 import styles from "./ControlPanel.module.scss";
 
 export const ControlPanel = () => {
@@ -23,6 +25,7 @@ export const ControlPanel = () => {
   const { id: noteId } = useRecoilValue(noteAtom);
   const setActiveNote = useSetRecoilState(noteAtom);
   const [notes, setNotes] = useRecoilState(notesAtom);
+  const [showEditNoteModal, setShowEditNoteModal] = useState(false);
   const { isInEditMode } = user;
 
   const handleSave = useCallback(() => {
@@ -96,31 +99,45 @@ export const ControlPanel = () => {
   );
 
   return (
-    <div className={styles.wrap}>
-      <FormControlLabel
-        control={<Switch checked={isInEditMode} onChange={switchEditMode} />}
-        label={isInEditMode ? "Edit: ON" : "Edit: OFF"}
-        labelPlacement="end"
-      />
-      <div className={styles.buttons}>
-        <ButtonWithIcon
-          disabled={!isInEditMode}
-          icon={faArrowAltCircleLeft}
-          text="Cancel"
+    <>
+      <div className={styles.wrap}>
+        <FormControlLabel
+          control={<Switch checked={isInEditMode} onChange={switchEditMode} />}
+          label={isInEditMode ? "Edit: ON" : "Edit: OFF"}
+          labelPlacement="end"
         />
-        <ButtonWithIcon
-          disabled={!isInEditMode}
-          icon={faSave}
-          text="Save"
-          onClick={handleSave}
-        />
-        <ButtonWithIcon
-          disabled={!isInEditMode}
-          icon={faTrashAlt}
-          text="Delete"
-          onClick={handleDelete}
-        />
+        <div className={styles.buttons}>
+          <ButtonWithIcon
+            disabled={!isInEditMode}
+            icon={faArrowAltCircleLeft}
+            text="Cancel"
+          />
+          <ButtonWithIcon
+            disabled={!isInEditMode}
+            icon={faSave}
+            text="Save"
+            onClick={handleSave}
+          />
+          <ButtonWithIcon
+            disabled={!isInEditMode}
+            icon={faTrashAlt}
+            text="Delete"
+            onClick={handleDelete}
+          />
+          <ButtonWithIcon
+            disabled={!isInEditMode}
+            icon={faClipboard}
+            text="Edit Note Info"
+            onClick={() => setShowEditNoteModal(true)}
+          />
+        </div>
       </div>
-    </div>
+      {showEditNoteModal && (
+        <EditNoteModal
+          isOpen={showEditNoteModal}
+          setShowModal={setShowEditNoteModal}
+        />
+      )}
+    </>
   );
 };

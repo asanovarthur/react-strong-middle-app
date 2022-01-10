@@ -30,9 +30,8 @@ export const useContentBlocks = (): UseContentBlocksType => {
 
       if (
         (data.length > 0 && contentBlocks.displayed.length < 1) ||
-        (data.length > 0 &&
-          contentBlocks.displayed.length > 0 &&
-          data[0].noteId !== contentBlocks.displayed[0].noteId)
+        (contentBlocks.displayed.length > 0 &&
+          activeNoteId !== contentBlocks.displayed[0].noteId)
       ) {
         setResult(data.sort((a, b) => a.order - b.order));
         setContentBlocks({

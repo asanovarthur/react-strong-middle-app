@@ -56,15 +56,13 @@ export const NotesTree = () => {
       .sort((note1, note2) => note1.creationDate - note2.creationDate);
 
     const parentElementsView = parentElements.map((note) => (
-      <div key={note.id} onClick={() => updateActiveNote(note)}>
-        <TreeNode
-          name={note.name}
-          childNodes={notes.filter(
-            (childNote) => childNote.parentId === note.id
-          )}
-          showIcon
-        />
-      </div>
+      <TreeNode
+        name={note.name}
+        childNodes={notes.filter((childNote) => childNote.parentId === note.id)}
+        showIcon
+        note={note}
+        action={updateActiveNote}
+      />
     ));
 
     setTreeElements({ data: parentElements, view: parentElementsView });
