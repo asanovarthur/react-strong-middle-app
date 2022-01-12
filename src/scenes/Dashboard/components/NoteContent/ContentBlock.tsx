@@ -15,7 +15,7 @@ import styles from "./NoteContent.module.scss";
 type ContentBlockProps = {
   contentBlock: ContentBlockType;
   showEditModal: boolean;
-  setShowEditModal: (flag: boolean) => void;
+  setShowEditModal: (blockOrder: ContentBlockType["order"]) => void;
 };
 
 export const ContentBlock: FC<ContentBlockProps> = ({

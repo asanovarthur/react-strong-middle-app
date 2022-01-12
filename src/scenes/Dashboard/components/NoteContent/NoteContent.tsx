@@ -1,33 +1,24 @@
 import { FC, useMemo, useState, useCallback } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrashAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ContentType, ContentBlock as ContentBlockType } from "types";
+import { ContentBlock as ContentBlockType } from "types";
 import { noteAtom } from "recoil/note";
 import userAtom from "recoil/user";
 import contentBlocksAtom from "recoil/contentBlocks";
 import { AddBlockModal } from "components/AddBlockModal";
-import { ContentBlockAdder } from "./ContentBlockAdder";
 import { ContentBlock } from "./ContentBlock";
 import styles from "./NoteContent.module.scss";
 
 export const NoteContent: FC = () => {
   const { name } = useRecoilValue(noteAtom);
   const { isInEditMode } = useRecoilValue(userAtom);
-  const [showAddBlockModal, setShowAddBlockModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [contentBlockType, setContentBlockType] = useState(ContentType.TEXT);
+  const [showEditModal, setShowEditModal] =
+    useState<ContentBlockType["order"]>(-1);
   const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
-
-  const maxBlockOrder = useMemo(() => {
-    if (contentBlocks.displayed.length < 1 && contentBlocks.edited.length < 1)
-      return 0;
-
-    return [...contentBlocks.displayed, ...contentBlocks.edited].sort(
-      (a, b) => b.order - a.order
-    )[0].order;
-  }, [contentBlocks]);
+  const [showAddBlockModal, setShowAddBlockModal] = useState(false);
+  const [addBlockOrder, setAddBlockOrder] = useState(-1);
 
   const reorder = useCallback(
     (list: ContentBlockType[], startIndex: any, endIndex: any) => {
@@ -85,50 +76,68 @@ export const NoteContent: FC = () => {
     [contentBlocks, setContentBlocks]
   );
 
+  const orderedBlocks = useMemo(
+    () => [...contentBlocks.displayed].sort((a, b) => a.order - b.order),
+    [contentBlocks.displayed]
+  );
+
   const contentBlocksView = useMemo(() => {
     return (
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {contentBlocks.displayed.map((item, index) => (
-                <span className={styles.draggableWrap}>
-                  <Draggable
-                    key={item.id}
-                    draggableId={`${item.order}`}
-                    index={index}
-                    isDragDisabled={!isInEditMode}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <ContentBlock
-                          key={item.order}
-                          contentBlock={item}
-                          showEditModal={showEditModal}
-                          setShowEditModal={setShowEditModal}
+              {orderedBlocks.map((item, index) => (
+                <>
+                  <span className={styles.draggableWrap}>
+                    <Draggable
+                      key={item.id}
+                      draggableId={`${item.order}`}
+                      index={index}
+                      isDragDisabled={!isInEditMode}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <ContentBlock
+                            key={item.order}
+                            contentBlock={item}
+                            showEditModal={showEditModal === item.order}
+                            setShowEditModal={setShowEditModal}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                    {isInEditMode && (
+                      <>
+                        <FontAwesomeIcon
+                          onClick={() => setShowEditModal(item.order)}
+                          icon={faEdit}
+                          color="#1976D2"
                         />
-                      </div>
+                        <FontAwesomeIcon
+                          onClick={() => handleDelete(item)}
+                          icon={faTrashAlt}
+                          color="#1976D2"
+                        />
+                      </>
                     )}
-                  </Draggable>
+                  </span>
                   {isInEditMode && (
-                    <>
-                      <FontAwesomeIcon
-                        onClick={() => setShowEditModal(true)}
-                        icon={faEdit}
-                        color="#1976D2"
-                      />
-                      <FontAwesomeIcon
-                        onClick={() => handleDelete(item)}
-                        icon={faTrashAlt}
-                        color="#1976D2"
-                      />
-                    </>
+                    <FontAwesomeIcon
+                      onClick={() => {
+                        setShowAddBlockModal(true);
+                        setAddBlockOrder(item.order + 1);
+                      }}
+                      icon={faPlus}
+                      color="#1976D2"
+                      className={styles.addBlockIcon}
+                    />
                   )}
-                </span>
+                </>
               ))}
               {provided.placeholder}
             </div>
@@ -142,19 +151,13 @@ export const NoteContent: FC = () => {
     <div className={styles.noteWrap}>
       <h1 className={styles.header}>{name}</h1>
       {contentBlocksView}
-      {isInEditMode && (
-        <ContentBlockAdder
-          contentBlockType={contentBlockType}
-          setContentBlockType={setContentBlockType}
+      {showAddBlockModal && (
+        <AddBlockModal
+          isOpen={showAddBlockModal}
           setShowModal={setShowAddBlockModal}
+          order={addBlockOrder}
         />
       )}
-      <AddBlockModal
-        isOpen={showAddBlockModal}
-        contentBlockType={contentBlockType}
-        setShowModal={setShowAddBlockModal}
-        maxBlockOrder={maxBlockOrder}
-      />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -7,6 +7,7 @@ import {
   faSave,
   faArrowAltCircleLeft,
   faClipboard,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { ContentBlock, Note } from "types";
 import { useUserNotes } from "dataManagement";
@@ -15,6 +16,7 @@ import contentBlocksAtom from "recoil/contentBlocks";
 import { noteAtom, notesAtom } from "recoil/note";
 import { db } from "provider/auth";
 import { ButtonWithIcon } from "components";
+import { AddBlockModal } from "components/AddBlockModal";
 import { EditNoteModal } from "./EditNoteModal";
 import styles from "./ControlPanel.module.scss";
 
@@ -26,6 +28,7 @@ export const ControlPanel = () => {
   const setActiveNote = useSetRecoilState(noteAtom);
   const [notes, setNotes] = useRecoilState(notesAtom);
   const [showEditNoteModal, setShowEditNoteModal] = useState(false);
+  const [showAddBlockModal, setShowAddBlockModal] = useState(false);
   const { isInEditMode } = user;
 
   const handleSave = useCallback(() => {
@@ -130,12 +133,24 @@ export const ControlPanel = () => {
             text="Edit Note Info"
             onClick={() => setShowEditNoteModal(true)}
           />
+          <ButtonWithIcon
+            disabled={!isInEditMode}
+            icon={faPlus}
+            onClick={() => setShowAddBlockModal(true)}
+            text="Add content block"
+          />
         </div>
       </div>
       {showEditNoteModal && (
         <EditNoteModal
           isOpen={showEditNoteModal}
           setShowModal={setShowEditNoteModal}
+        />
+      )}
+      {showAddBlockModal && (
+        <AddBlockModal
+          isOpen={showAddBlockModal}
+          setShowModal={setShowAddBlockModal}
         />
       )}
     </>

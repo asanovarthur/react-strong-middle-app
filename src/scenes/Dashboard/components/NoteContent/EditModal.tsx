@@ -18,7 +18,7 @@ import styles from "./EditModal.module.scss";
 type EditModalProps = {
   contentBlock: ContentBlockType;
   isOpen: boolean;
-  setShowModal: (flag: boolean) => void;
+  setShowModal: (blockOrder: ContentBlockType["order"]) => void;
 };
 
 export const EditModal: FC<EditModalProps> = ({
@@ -32,7 +32,7 @@ export const EditModal: FC<EditModalProps> = ({
   );
 
   const handleClose = useCallback(() => {
-    setShowModal(false);
+    setShowModal(-1);
     setValue(contentBlock.value);
   }, [setShowModal, contentBlock.value]);
 
