@@ -10,7 +10,7 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { ContentBlock, Note } from "types";
-import { useUserNotes } from "dataManagement";
+import { useContentBlocks, useUserNotes } from "dataManagement";
 import userAtom from "recoil/user";
 import contentBlocksAtom from "recoil/contentBlocks";
 import { noteAtom, notesAtom } from "recoil/note";
@@ -23,6 +23,7 @@ import styles from "./ControlPanel.module.scss";
 export const ControlPanel = () => {
   const { data } = useUserNotes();
   const [user, setUser] = useRecoilState(userAtom);
+  const { data: dbContentBlocks } = useContentBlocks();
   const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
   const { id: noteId } = useRecoilValue(noteAtom);
   const setActiveNote = useSetRecoilState(noteAtom);
@@ -96,6 +97,15 @@ export const ControlPanel = () => {
       .then(() => setNotes(notes.filter((note) => note.id !== noteId)));
   }, [noteId, data, setActiveNote, notes, setNotes]);
 
+  const handleCancel = useCallback(() => {
+    setContentBlocks({
+      displayed: dbContentBlocks,
+      deleted: [],
+      updated: [],
+      edited: [],
+    });
+  }, [dbContentBlocks, setContentBlocks]);
+
   const switchEditMode = useCallback(
     () => setUser({ ...user, isInEditMode: !isInEditMode }),
     [user, setUser, isInEditMode]
@@ -114,6 +124,7 @@ export const ControlPanel = () => {
             disabled={!isInEditMode}
             icon={faArrowAltCircleLeft}
             text="Cancel"
+            onClick={handleCancel}
           />
           <ButtonWithIcon
             disabled={!isInEditMode}
