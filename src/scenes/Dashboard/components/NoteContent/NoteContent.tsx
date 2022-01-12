@@ -145,7 +145,13 @@ export const NoteContent: FC = () => {
         </Droppable>
       </DragDropContext>
     );
-  }, [contentBlocks, onDragEnd, isInEditMode, handleDelete, showEditModal]);
+  }, [
+    onDragEnd,
+    isInEditMode,
+    handleDelete,
+    showEditModal,
+    orderedBlocks,
+  ]);
 
   return (
     <div className={styles.noteWrap}>
