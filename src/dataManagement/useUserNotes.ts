@@ -18,6 +18,8 @@ export const useUserNotes = (): UseUserNotesType => {
   const [result, setResult] = useState<Note[]>(notes);
 
   useEffect(() => {
+    if (!userId) return;
+
     async function getNotes() {
       const dbNotes = await db
         .collection("notes")
