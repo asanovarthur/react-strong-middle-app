@@ -1,16 +1,11 @@
 import { FC, useCallback, useMemo, useRef, useEffect } from "react";
 import ContentEditable, { Props } from "react-contenteditable";
-import { ContentBlock } from "types";
+import { EditorProps } from "../types";
 import { buttonsConfig } from "../constants";
 import { EditButton } from "../EditButton";
 import styles from "../AddBlockModal.module.scss";
 
-type TextEditorProps = {
-  value: ContentBlock["value"];
-  setValue: (value: ContentBlock["value"]) => void;
-};
-
-export const TextEditor: FC<TextEditorProps> = ({ value, setValue }) => {
+export const TextEditor: FC<EditorProps> = ({ value, setValue }) => {
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

@@ -12,7 +12,7 @@ import contentBlocksAtom from "recoil/contentBlocks";
 import { noteAtom } from "recoil/note";
 import { uploadImage } from "provider/handleUpload";
 import { ButtonWithIcon } from "components";
-import { TextEditor, ImageEditor, VideoEditor, LinkEditor } from "./components";
+import { defaultModalValue, editors } from "./constants";
 import styles from "./AddBlockModal.module.scss";
 
 type AddBlockModalProps = {
@@ -28,7 +28,7 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
 }) => {
   const { id: noteId } = useRecoilValue(noteAtom);
   const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
-  const [value, setValue] = useState<ContentBlock["value"]>("");
+  const [value, setValue] = useState<ContentBlock["value"]>(defaultModalValue);
   const [contentBlockType, setContentBlockType] = useState(ContentType.TEXT);
 
   const maxBlockOrder = useMemo(() => {
@@ -42,7 +42,7 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
 
   const handleClose = useCallback(() => {
     setShowModal(false);
-    setValue("");
+    setValue(defaultModalValue);
   }, [setShowModal]);
 
   const handleSave = useCallback(() => {
@@ -87,22 +87,10 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
   ]);
 
   const inputElement = useMemo(() => {
-    switch (contentBlockType) {
-      case ContentType.TEXT:
-      default:
-        return <TextEditor value={value} setValue={setValue} />;
-      case ContentType.IMAGE:
-        return <ImageEditor value={value} setValue={setValue} />;
-      case ContentType.VIDEO:
-        return <VideoEditor value={value} setValue={setValue} />;
-      case ContentType.LINK:
-        return <LinkEditor value={value} setValue={setValue} />;
-    }
-  }, [contentBlockType, value]);
+    const Editor = editors[contentBlockType];
 
-  const handleChange = (event: any) => {
-    setContentBlockType(event.target.value);
-  };
+    return <Editor value={value} setValue={setValue} />;
+  }, [contentBlockType, value]);
 
   return (
     <Modal open={isOpen} onClose={handleClose}>
@@ -114,7 +102,7 @@ export const AddBlockModal: FC<AddBlockModalProps> = ({
           <Select
             labelId="contentBlockSelector"
             value={contentBlockType}
-            onChange={handleChange}
+            onChange={(event: any) => setContentBlockType(event.target.value)}
             autoWidth
             label="contentBlockSelector"
           >

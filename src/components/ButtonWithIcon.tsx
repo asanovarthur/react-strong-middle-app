@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ContainedButton as Button } from "components";
 
 type ByttonWithIconProps = {
-  disabled?: boolean;
   icon: IconDefinition;
   text: string;
+  disabled?: boolean;
   className?: string;
   onClick?: () => void;
 };

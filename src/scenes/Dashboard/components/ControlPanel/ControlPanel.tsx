@@ -10,7 +10,7 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { ContentBlock, Note } from "types";
-import { useContentBlocks, useUserNotes } from "dataManagement";
+import { useContentBlocks } from "dataManagement";
 import userAtom from "recoil/user";
 import contentBlocksAtom from "recoil/contentBlocks";
 import { noteAtom, notesAtom } from "recoil/note";
@@ -21,8 +21,8 @@ import { EditNoteModal } from "./EditNoteModal";
 import styles from "./ControlPanel.module.scss";
 
 export const ControlPanel = () => {
-  const { data } = useUserNotes();
   const [user, setUser] = useRecoilState(userAtom);
+  const data = useRecoilValue(notesAtom);
   const { data: dbContentBlocks } = useContentBlocks();
   const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
   const { id: noteId } = useRecoilValue(noteAtom);

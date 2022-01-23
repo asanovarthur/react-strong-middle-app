@@ -7,12 +7,7 @@ import { ContentType, ContentBlock as ContentBlockType } from "types";
 import { uploadImage } from "provider/handleUpload";
 import contentBlocksAtom from "recoil/contentBlocks";
 import { ButtonWithIcon } from "components";
-import {
-  TextEditor,
-  ImageEditor,
-  VideoEditor,
-  LinkEditor,
-} from "components/AddBlockModal/components";
+import { editors } from "components/AddBlockModal/constants";
 import styles from "./EditModal.module.scss";
 
 type EditModalProps = {
@@ -77,17 +72,9 @@ export const EditModal: FC<EditModalProps> = ({
   ]);
 
   const inputElement = useMemo(() => {
-    switch (contentBlock.type) {
-      case ContentType.TEXT:
-      default:
-        return <TextEditor value={value} setValue={setValue} />;
-      case ContentType.IMAGE:
-        return <ImageEditor value={value} setValue={setValue} />;
-      case ContentType.VIDEO:
-        return <VideoEditor value={value} setValue={setValue} />;
-      case ContentType.LINK:
-        return <LinkEditor value={value} setValue={setValue} />;
-    }
+    const Editor = editors[contentBlock.type];
+
+    return <Editor value={value} setValue={setValue} />;
   }, [contentBlock.type, value]);
 
   return (

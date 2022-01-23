@@ -7,6 +7,7 @@ import styles from "./Login.module.scss";
 
 export const Login = () => {
   const [recoilUser, setRecoilUser] = useRecoilState(userAtom);
+  
   const signIn = useCallback(() => {
     signInWithGoogle().then((user) => {
       user &&

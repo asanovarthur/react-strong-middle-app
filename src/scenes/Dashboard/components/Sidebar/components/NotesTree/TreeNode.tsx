@@ -16,7 +16,6 @@ type TreeNodeProps = {
   nestingLevel?: number;
   action?: any;
   note?: Note;
-  updateActiveNote?: any;
 };
 
 export const TreeNode: FC<TreeNodeProps> = ({
@@ -26,7 +25,6 @@ export const TreeNode: FC<TreeNodeProps> = ({
   showIcon,
   action,
   note,
-  updateActiveNote,
   nestingLevel = 1,
 }) => {
   const hasChildren = childNodes.length > 0;
@@ -58,7 +56,6 @@ export const TreeNode: FC<TreeNodeProps> = ({
       {showChildren &&
         (hasChildren ? (
           childNodes.map((node) => (
-            // <div key={node.id} onClick={() => updateActiveNote(node)}>
             <TreeNode
               name={node.name}
               note={node}
@@ -70,7 +67,6 @@ export const TreeNode: FC<TreeNodeProps> = ({
               nestingLevel={nestingLevel + 1}
               className={styles.child}
             />
-            // </div>
           ))
         ) : (
           <TreeNode

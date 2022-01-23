@@ -1,162 +1,22 @@
-import { FC, useMemo, useState, useCallback } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { faEdit, faTrashAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ContentBlock as ContentBlockType } from "types";
+import { FC, useState } from "react";
+import { useRecoilValue } from "recoil";
 import { noteAtom } from "recoil/note";
-import userAtom from "recoil/user";
-import contentBlocksAtom from "recoil/contentBlocks";
 import { AddBlockModal } from "components/AddBlockModal";
-import { ContentBlock } from "./ContentBlock";
+import { ContentBlocksList } from "./ContentBlocksList";
 import styles from "./NoteContent.module.scss";
 
 export const NoteContent: FC = () => {
   const { name } = useRecoilValue(noteAtom);
-  const { isInEditMode } = useRecoilValue(userAtom);
-  const [showEditModal, setShowEditModal] =
-    useState<ContentBlockType["order"]>(-1);
-  const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
   const [showAddBlockModal, setShowAddBlockModal] = useState(false);
   const [addBlockOrder, setAddBlockOrder] = useState(-1);
-
-  const reorder = useCallback(
-    (list: ContentBlockType[], startIndex: any, endIndex: any) => {
-      list[startIndex] = { ...list[startIndex], order: list[endIndex].order };
-      const [removed] = list.splice(startIndex, 1);
-      list.splice(endIndex, 0, removed);
-
-      if (startIndex > endIndex) {
-        list.forEach((item, index) => {
-          if (index > endIndex && index <= startIndex) {
-            list[index] = { ...item, order: item.order + 1 };
-          }
-        });
-      } else if (startIndex < endIndex) {
-        list.forEach((item, index) => {
-          if (index >= startIndex && index < endIndex)
-            list[index] = { ...item, order: item.order - 1 };
-        });
-      }
-
-      return list;
-    },
-    []
-  );
-
-  const onDragEnd = useCallback(
-    (result: any) => {
-      if (!result.destination) {
-        return;
-      }
-
-      const newBlocks = reorder(
-        contentBlocks.displayed.slice(),
-        result.source.index,
-        result.destination.index
-      );
-      setContentBlocks({ ...contentBlocks, displayed: newBlocks });
-    },
-    [contentBlocks, setContentBlocks, reorder]
-  );
-
-  const handleDelete = useCallback(
-    (item: ContentBlockType) => {
-      setContentBlocks({
-        ...contentBlocks,
-        displayed: contentBlocks.displayed.filter(
-          (block) => block.order !== item.order
-        ),
-        edited: contentBlocks.edited.filter(
-          (block) => block.order !== item.order
-        ),
-        deleted: [...contentBlocks.deleted, item.id],
-      });
-    },
-    [contentBlocks, setContentBlocks]
-  );
-
-  const orderedBlocks = useMemo(
-    () => [...contentBlocks.displayed].sort((a, b) => a.order - b.order),
-    [contentBlocks.displayed]
-  );
-
-  const contentBlocksView = useMemo(() => {
-    return (
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {orderedBlocks.map((item, index) => (
-                <>
-                  <span className={styles.draggableWrap}>
-                    <Draggable
-                      key={item.id}
-                      draggableId={`${item.order}`}
-                      index={index}
-                      isDragDisabled={!isInEditMode}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <ContentBlock
-                            key={item.order}
-                            contentBlock={item}
-                            showEditModal={showEditModal === item.order}
-                            setShowEditModal={setShowEditModal}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                    {isInEditMode && (
-                      <>
-                        <FontAwesomeIcon
-                          onClick={() => setShowEditModal(item.order)}
-                          icon={faEdit}
-                          color="#1976D2"
-                        />
-                        <FontAwesomeIcon
-                          onClick={() => handleDelete(item)}
-                          icon={faTrashAlt}
-                          color="#1976D2"
-                        />
-                      </>
-                    )}
-                  </span>
-                  {isInEditMode && (
-                    <FontAwesomeIcon
-                      onClick={() => {
-                        setShowAddBlockModal(true);
-                        setAddBlockOrder(item.order + 1);
-                      }}
-                      icon={faPlus}
-                      color="#1976D2"
-                      className={styles.addBlockIcon}
-                    />
-                  )}
-                </>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-    );
-  }, [
-    onDragEnd,
-    isInEditMode,
-    handleDelete,
-    showEditModal,
-    orderedBlocks,
-  ]);
 
   return (
     <div className={styles.noteWrap}>
       <h1 className={styles.header}>{name}</h1>
-      {contentBlocksView}
+      <ContentBlocksList
+        setAddBlockOrder={setAddBlockOrder}
+        setShowAddBlockModal={setShowAddBlockModal}
+      />
       {showAddBlockModal && (
         <AddBlockModal
           isOpen={showAddBlockModal}

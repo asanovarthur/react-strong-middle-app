@@ -1,20 +1,15 @@
 import { FC, useCallback, useState, useMemo } from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import { ContentBlock } from "types";
 import { getImage } from "provider/handleUpload";
+import { EditorProps } from "../types";
 import styles from "../AddBlockModal.module.scss";
 
 const Input = styled("input")({
   display: "none",
 });
 
-type ImageEditorProps = {
-  value: ContentBlock["value"];
-  setValue: (value: ContentBlock["value"]) => void;
-};
-
-export const ImageEditor: FC<ImageEditorProps> = ({ value, setValue }) => {
+export const ImageEditor: FC<EditorProps> = ({ value, setValue }) => {
   const [file, setFile] = useState<File | null>(null);
   const [imgUrl, setImgUrl] = useState<string>("");
 

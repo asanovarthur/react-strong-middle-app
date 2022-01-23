@@ -16,6 +16,17 @@ export const useContentBlocks = (): UseContentBlocksType => {
 
   useEffect(() => {
     async function getContentBlocks() {
+      if (!activeNoteId) return;
+
+      if (contentBlocks.updated.length > 0 || contentBlocks.deleted.length > 0)
+        return;
+
+      if (
+        contentBlocks.displayed.length > 0 &&
+        activeNoteId === contentBlocks.displayed[0].noteId
+      )
+        return;
+
       const dbContentBlocks = await db
         .collection("contentBlocks")
         .where("noteId", "==", activeNoteId ?? -1)
@@ -24,9 +35,6 @@ export const useContentBlocks = (): UseContentBlocksType => {
       const data = dbContentBlocks.docs.map((item) => {
         return { id: item.id, ...item.data() };
       }) as ContentBlock[];
-
-      if (contentBlocks.updated.length > 0 || contentBlocks.deleted.length > 0)
-        return;
 
       if (
         (data.length > 0 && contentBlocks.displayed.length < 1) ||

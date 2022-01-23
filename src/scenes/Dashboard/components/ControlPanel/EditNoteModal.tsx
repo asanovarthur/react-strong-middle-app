@@ -1,15 +1,15 @@
-import { FC, useCallback, useState, useMemo } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { FC, useCallback, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { Note } from "types";
-import { useUserNotes, useUserNote } from "dataManagement";
+import { useUserNote } from "dataManagement";
 import { db } from "provider/auth";
 import { noteAtom, notesAtom } from "recoil/note";
-import { TreeNode } from "scenes/Dashboard/components/Sidebar/components/NotesTree/TreeNode";
 import { ButtonWithIcon } from "components";
+import { Tree } from "components/Tree";
 import styles from "./EditNoteModal.module.scss";
 
 type EditNoteModalProps = {
@@ -21,9 +21,8 @@ export const EditNoteModal: FC<EditNoteModalProps> = ({
   isOpen,
   setShowModal,
 }) => {
-  const { data } = useUserNotes();
   const { id, name, uri, parentId } = useRecoilValue(noteAtom);
-  const setNotes = useSetRecoilState(notesAtom);
+  const [notes, setNotes] = useRecoilState(notesAtom);
   const [noteInfo, setNoteInfo] = useState({
     name,
     uri,
@@ -58,26 +57,6 @@ export const EditNoteModal: FC<EditNoteModalProps> = ({
     [noteInfo]
   );
 
-  const select = useMemo(() => {
-    const parentElements = data
-      .filter((parentNote) => !parentNote.parentId && parentNote.id !== id)
-      .sort((note1, note2) => note1.creationDate - note2.creationDate);
-
-    const parentElementsView = parentElements.map((note) => (
-      <TreeNode
-        key={note.id}
-        name={note.name}
-        childNodes={data.filter((childNote) => childNote.parentId === note.id)}
-        showIcon
-        note={note}
-        action={updateParent}
-        nestingLevel={0}
-      />
-    ));
-
-    return parentElementsView;
-  }, [data, updateParent, id]);
-
   return (
     <Modal open={isOpen} onClose={handleClose} onBackdropClick={handleClose}>
       <Box className={styles.box}>
@@ -102,7 +81,7 @@ export const EditNoteModal: FC<EditNoteModalProps> = ({
           className={styles.outlinedInput}
         />
         <p>Parent: {note?.name ? note.name : "none"}</p>
-        {select}
+        <Tree notes={notes} action={updateParent} nestingLevel={0}/>
         <ButtonWithIcon
           onClick={handleSave}
           icon={faSave}

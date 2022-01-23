@@ -1,15 +1,10 @@
 import { FC, useCallback, useState } from "react";
 import ReactPlayer from "react-player";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { ContentBlock } from "types";
+import { EditorProps } from "../types";
 import styles from "../AddBlockModal.module.scss";
 
-type VideoEditorProps = {
-  value: ContentBlock["value"];
-  setValue: (value: ContentBlock["value"]) => void;
-};
-
-export const VideoEditor: FC<VideoEditorProps> = ({ value, setValue }) => {
+export const VideoEditor: FC<EditorProps> = ({ value, setValue }) => {
   const [uri, setUri] = useState<string>("");
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
