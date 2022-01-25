@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
 import { Note } from "types";
-import { useContentBlocks, useUserNotes } from "dataManagement";
-import { noteAtom } from "recoil/note";
+import { useContentBlocks } from "dataManagement";
+import { noteAtom, notesAtom } from "recoil/note";
 import userAtom from "recoil/user";
 import contentBlocksAtom from "recoil/contentBlocks";
 import { Tree } from "components/Tree";
@@ -13,7 +13,7 @@ export const NotesTree = () => {
   const history = useHistory();
   const setActiveNote = useSetRecoilState(noteAtom);
   const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
-  const { data: notes } = useUserNotes();
+  const notes = useRecoilValue(notesAtom);
   const [user, setUser] = useRecoilState(userAtom);
   const { data } = useContentBlocks();
 
