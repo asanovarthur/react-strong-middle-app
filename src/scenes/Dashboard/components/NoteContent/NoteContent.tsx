@@ -17,13 +17,11 @@ export const NoteContent: FC = () => {
         setAddBlockOrder={setAddBlockOrder}
         setShowAddBlockModal={setShowAddBlockModal}
       />
-      {showAddBlockModal && (
-        <AddBlockModal
-          isOpen={showAddBlockModal}
-          setShowModal={setShowAddBlockModal}
-          order={addBlockOrder}
-        />
-      )}
+      <AddBlockModal
+        isOpen={showAddBlockModal}
+        setShowModal={setShowAddBlockModal}
+        order={addBlockOrder}
+      />
     </div>
   );
 };

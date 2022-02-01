@@ -20,9 +20,9 @@ export const ContentBlocksList: FC<ContentBlocksListProps> = ({
   setAddBlockOrder,
 }) => {
   const { isInEditMode } = useRecoilValue(userAtom);
+  const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
   const [showEditModal, setShowEditModal] =
     useState<ContentBlockType["order"]>(-1);
-  const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
 
   const onDragEnd = useCallback(
     (result: any) => {

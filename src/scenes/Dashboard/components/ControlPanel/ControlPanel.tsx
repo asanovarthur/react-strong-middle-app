@@ -1,14 +1,7 @@
-import { useCallback, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useCallback, useState, useMemo } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import {
-  faTrashAlt,
-  faSave,
-  faArrowAltCircleLeft,
-  faClipboard,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
 import { ContentBlock, Note } from "types";
 import { useContentBlocks } from "dataManagement";
 import userAtom from "recoil/user";
@@ -19,14 +12,14 @@ import { ButtonWithIcon } from "components";
 import { AddBlockModal } from "components/AddBlockModal";
 import { EditNoteModal } from "./EditNoteModal";
 import styles from "./ControlPanel.module.scss";
+import { getButtonsConfig } from "./constants";
 
 export const ControlPanel = () => {
-  const [user, setUser] = useRecoilState(userAtom);
-  const data = useRecoilValue(notesAtom);
   const { data: dbContentBlocks } = useContentBlocks();
+  const data = useRecoilValue(notesAtom);
+  const [note, setNote] = useRecoilState(noteAtom);
+  const [user, setUser] = useRecoilState(userAtom);
   const [contentBlocks, setContentBlocks] = useRecoilState(contentBlocksAtom);
-  const { id: noteId } = useRecoilValue(noteAtom);
-  const setActiveNote = useSetRecoilState(noteAtom);
   const [notes, setNotes] = useRecoilState(notesAtom);
   const [showEditNoteModal, setShowEditNoteModal] = useState(false);
   const [showAddBlockModal, setShowAddBlockModal] = useState(false);
@@ -53,7 +46,7 @@ export const ControlPanel = () => {
         .then(async () => {
           const newBlocks = await db
             .collection("contentBlocks")
-            .where("noteId", "==", noteId ?? -1)
+            .where("noteId", "==", note.id ?? -1)
             .get();
 
           const newData = newBlocks.docs.map((item) => {
@@ -71,22 +64,22 @@ export const ControlPanel = () => {
           }
         });
     });
-  }, [contentBlocks, setContentBlocks, noteId]);
+  }, [contentBlocks, setContentBlocks, note.id]);
 
   const handleDelete = useCallback(() => {
     db.collection("notes")
-      .doc(`${noteId}`)
+      .doc(`${note.id}`)
       .delete()
       .then(() => {
         db.collection("contentBlocks")
-          .where("noteId", "==", noteId)
+          .where("noteId", "==", note.id)
           .get()
           .then((snapshot) => {
             Promise.all(snapshot.docs.map((d) => d.ref.delete()));
           });
       })
       .then(() =>
-        setActiveNote(
+        setNote(
           (data as Note[])
             .filter((note) => !note.parentId)
             .sort(
@@ -94,8 +87,8 @@ export const ControlPanel = () => {
             )[0] ?? {}
         )
       )
-      .then(() => setNotes(notes.filter((note) => note.id !== noteId)));
-  }, [noteId, data, setActiveNote, notes, setNotes]);
+      .then(() => setNotes(notes.filter((n) => n.id !== note.id)));
+  }, [note.id, data, setNote, notes, setNotes]);
 
   const handleCancel = useCallback(() => {
     setContentBlocks({
@@ -111,6 +104,25 @@ export const ControlPanel = () => {
     [user, setUser, isInEditMode]
   );
 
+  const buttons = useMemo(() => {
+    const buttonsConfig = getButtonsConfig(
+      handleCancel,
+      handleSave,
+      handleDelete,
+      () => setShowEditNoteModal(true),
+      () => setShowAddBlockModal(true)
+    );
+
+    return buttonsConfig.map((button) => (
+      <ButtonWithIcon
+        disabled={!isInEditMode}
+        icon={button.icon}
+        text={button.text}
+        onClick={button.onClick}
+      />
+    ));
+  }, [handleCancel, handleSave, handleDelete, isInEditMode]);
+
   return (
     <>
       <div className={styles.wrap}>
@@ -119,38 +131,7 @@ export const ControlPanel = () => {
           label={isInEditMode ? "Edit: ON" : "Edit: OFF"}
           labelPlacement="end"
         />
-        <div className={styles.buttons}>
-          <ButtonWithIcon
-            disabled={!isInEditMode}
-            icon={faArrowAltCircleLeft}
-            text="Cancel"
-            onClick={handleCancel}
-          />
-          <ButtonWithIcon
-            disabled={!isInEditMode}
-            icon={faSave}
-            text="Save"
-            onClick={handleSave}
-          />
-          <ButtonWithIcon
-            disabled={!isInEditMode}
-            icon={faTrashAlt}
-            text="Delete"
-            onClick={handleDelete}
-          />
-          <ButtonWithIcon
-            disabled={!isInEditMode}
-            icon={faClipboard}
-            text="Edit Note Info"
-            onClick={() => setShowEditNoteModal(true)}
-          />
-          <ButtonWithIcon
-            disabled={!isInEditMode}
-            icon={faPlus}
-            onClick={() => setShowAddBlockModal(true)}
-            text="Add content block"
-          />
-        </div>
+        <div className={styles.buttons}>{buttons}</div>
       </div>
       {showEditNoteModal && (
         <EditNoteModal

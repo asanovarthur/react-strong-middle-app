@@ -23,10 +23,11 @@ export const ContentBlock: FC<ContentBlockProps> = ({
   showEditModal,
   setShowEditModal,
 }) => {
+  const user = useRecoilValue(userAtom);
   const setActiveNote = useSetRecoilState(noteAtom);
   const [imgUrl, setImgUrl] = useState();
   const [linkNote, setLinkNote] = useState<Note>({} as Note);
-  const user = useRecoilValue(userAtom);
+  
   const { isInEditMode } = user;
   let component = null;
 
